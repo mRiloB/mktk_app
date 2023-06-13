@@ -8,9 +8,13 @@ class VoucherBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(title),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Card(
+        child: Center(
+          child: Text(title),
+        ),
+      ),
     );
   }
 }

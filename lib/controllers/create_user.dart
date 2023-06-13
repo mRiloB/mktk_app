@@ -40,16 +40,16 @@ class MkTkUser {
   }
 
   String generatePassword() {
-    const length = 8;
+    const length = 6;
     const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
-    const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = '0123456789';
-    const special = '@#*?!=+';
+    // const special = '@#*?!=+';
 
     String chars = "";
-    chars += '$letterLowerCase$letterUpperCase';
+    chars += letterLowerCase;
     chars += number;
-    chars += special;
+    // chars += special;
 
     return List.generate(length, (index) {
       final indexRandom = Random.secure().nextInt(chars.length);
@@ -71,7 +71,7 @@ class MkTkUser {
     Map<String, String> config = storageConfig.getItem('config');
     if (profile == '1h') ret = "01:00:00";
     if (profile == '5h') ret = "05:00:00";
-    if (profile == 'Completa') ret = config["limit-uptime"]!;
+    if (profile == 'Viagem-Completa') ret = config["limit-uptime"]!;
     return ret;
   }
 

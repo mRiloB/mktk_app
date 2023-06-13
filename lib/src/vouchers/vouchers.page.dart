@@ -15,6 +15,7 @@ class _VouchersPageState extends State<VouchersPage> {
   MkTkAPI api = MkTkAPI();
   MkTkUser user = MkTkUser();
   final LocalStorage storage = LocalStorage('configuration.json');
+  final LocalStorage storageHistory = LocalStorage('history.json');
   // final LocalStorage storageVoucher = LocalStorage('voucher_user.json');
   bool isConfigured = false;
 
@@ -37,23 +38,52 @@ class _VouchersPageState extends State<VouchersPage> {
   //   _messageBox('Voucher storage limpo!');
   // }
 
+  void addToHistory(Map<String, dynamic> payload) async {
+    // save the history in local storage
+    payload.addAll({"createdAt": DateTime.timestamp().toString()});
+    List<Map<String, dynamic>> vouchers = [];
+    try {
+      dynamic tempHistory = storageHistory.getItem('vouchers');
+      if (tempHistory != null) {
+        vouchers = tempHistory;
+      }
+      debugPrint("=== ADD TO HISTORY: $vouchers");
+      vouchers.add(payload);
+      await storageHistory.setItem('vouchers', vouchers);
+    } catch (e) {
+      debugPrint('=== ADD TO HISTORY ERROR: ${e.toString()}');
+    }
+    //
+  }
+
   void _createVoucher(String profile) async {
     try {
       api.setConfigurations();
-      Map<String, String> userPass = await user.getUserAndPassword();
+      Map<String, String> userCredentials = await user.getUserAndPassword();
       String limitUptime = user.getLimitUptime(profile);
-      Map<String, String> payload = {
-        "name": userPass["user"]!,
-        "password": userPass["password"]!,
+      Map<String, dynamic> payload = {
+        "name": userCredentials["user"]!,
+        "password": userCredentials["password"]!,
         "server": "hotspot1",
         "profile": profile,
         "limit-uptime": limitUptime
       };
       api.cmdAdd(payload);
+      addToHistory(payload);
       debugPrint("=== VOUCHER CRIADO: $payload");
       _messageBox('Voucher criado!');
     } catch (e) {
       debugPrint("=== CREATE VOUCHER ERROR: ${e.toString()}");
+    }
+  }
+
+  void _listUsers() async {
+    try {
+      api.setConfigurations();
+      dynamic users = await api.cmdPrint("ip/hotspot/user");
+      debugPrint("=== USERS: $users");
+    } catch (e) {
+      debugPrint("=== LIST USERS ERROR: ${e.toString()}");
     }
   }
 
@@ -72,19 +102,29 @@ class _VouchersPageState extends State<VouchersPage> {
   @override
   Widget build(BuildContext context) {
     return isConfigured
-        ? GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            crossAxisCount: 3,
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-                VoucherBtn(title: "1H", onPressed: () => _createVoucher('1h')),
-                VoucherBtn(title: "5H", onPressed: () => _createVoucher('5h')),
-                VoucherBtn(
-                    title: "Viagem Completa",
-                    onPressed: () => _createVoucher('Completa')),
-              ])
+              GridView.count(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 3,
+                  children: <Widget>[
+                    VoucherBtn(
+                        title: "1H", onPressed: () => _createVoucher('1h')),
+                    VoucherBtn(
+                        title: "5H", onPressed: () => _createVoucher('5h')),
+                    VoucherBtn(
+                        title: "Completa",
+                        onPressed: () => _createVoucher('Viagem-Completa')),
+                    VoucherBtn(title: "Listar", onPressed: () => _listUsers()),
+                  ]),
+              const Divider(),
+            ],
+          )
         : const Center(
             child: Text("Faça a configuração do aplicativo."),
           );

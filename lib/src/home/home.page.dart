@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/configuration/configuration.page.dart';
+import 'package:mktk_app/src/vouchers/history.page.dart';
 import 'package:mktk_app/src/vouchers/vouchers.page.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static const List _pagesOptions = [
-    {"screen": VouchersPage(), "title": "Moby Vouchers"},
+    {"screen": VouchersPage(), "title": "Moby Vouchers v0.0.2"},
+    {"screen": VouchersHistoryPage(), "title": "Histórico"},
     {"screen": ConfigurationPage(), "title": "Configurações"},
   ];
 
@@ -44,6 +46,10 @@ class _HomePageState extends State<HomePage> {
           //   icon: Icon(Icons.insert_chart_outlined_sharp),
           //   label: 'Relatórios',
           // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Histórico',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Configurações',

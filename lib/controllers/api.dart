@@ -40,14 +40,14 @@ class MkTkAPI {
         await http.get(Uri.parse('$baseUrl/$cmd'), headers: getHeaders());
     debugPrint('STATUS: ${response.statusCode.toString()}');
 
-    if (response.statusCode == 200) {
-      debugPrint('=== BODY: ${response.body}');
-      return response.body;
-    }
+    // if (response.statusCode == 200) {
+    debugPrint('=== BODY ${response.statusCode}: ${response.body}');
+    return response.body;
+    // }
   }
 
   // função que roda o comando de adicionar users (vouchers)
-  void cmdAdd(Map<String, String> payload) async {
+  void cmdAdd(Map<String, dynamic> payload) async {
     final response = await http.put(Uri.parse('$baseUrl/ip/hotspot/user'),
         body: jsonEncode(payload), headers: getHeaders());
     debugPrint('=== STATUS: ${response.statusCode.toString()}');

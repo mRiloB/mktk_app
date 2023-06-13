@@ -16,6 +16,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
   TextEditingController mktkPass = TextEditingController();
   TextEditingController mktkLimitUptime = TextEditingController();
   final LocalStorage storage = LocalStorage('configuration.json');
+  final LocalStorage storageVoucher = LocalStorage('voucher_user.json');
 
   @override
   void initState() {
@@ -44,10 +45,15 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
     super.dispose();
   }
 
-  void _messageBox() {
+  void _clearStorage() async {
+    await storageVoucher.clear();
+    _messageBox('Voucher storage limpo!');
+  }
+
+  void _messageBox(String text) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('As Configurações foram salvas!'),
+        content: Text(text),
         action: SnackBarAction(
           label: 'Fechar',
           onPressed: () {},
@@ -87,20 +93,32 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
                 control: mktkLimitUptime,
                 placeholder: '0d 00:00:00',
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await storage.setItem('config', {
-                      'ip': mktkIp.text,
-                      'user': mktkUser.text,
-                      'password': mktkPass.text,
-                      'limit-uptime': mktkLimitUptime.text,
-                    });
-                    await storage.setItem('isConfig', true);
-                    _messageBox();
-                  }
-                },
-                child: const Text('Salvar'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await storage.setItem('config', {
+                        'ip': mktkIp.text,
+                        'user': mktkUser.text,
+                        'password': mktkPass.text,
+                        'limit-uptime': mktkLimitUptime.text,
+                      });
+                      await storage.setItem('isConfig', true);
+                      _messageBox("As configurações foram salvas!");
+                    }
+                  },
+                  child: const Text('Salvar'),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    _clearStorage();
+                  },
+                  child: const Text('Limpar LocalStorage'),
+                ),
               ),
             ],
           ),

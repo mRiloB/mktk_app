@@ -14,20 +14,23 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: control,
-      validator: !noValid
-          ? (value) {
-              if (value == null || value.isEmpty) {
-                return 'Campo obrigatório';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: TextFormField(
+        controller: control,
+        validator: !noValid
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Campo obrigatório';
+                }
+                return null;
               }
-              return null;
-            }
-          : null,
-      decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: placeholder,
-          labelText: label),
+            : null,
+        decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: placeholder,
+            labelText: label),
+      ),
     );
   }
 }
