@@ -9,5 +9,18 @@ class Connection {
     this.password = password ?? '';
   }
 
+  Map<String, String> toMap() {
+    return {
+      'ip': ip,
+      'login': login,
+      'password': password,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Info {ip: $ip, login: $login, password: $password}';
+  }
+
   bool get isEmpty => ip.isEmpty && login.isEmpty;
 }

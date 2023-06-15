@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/shared/models/connection.model.dart';
-import 'package:mktk_app/src/shared/storage/configuration/configuration.hive.dart';
+// import 'package:mktk_app/src/shared/models/connection.model.dart';
+import 'package:mktk_app/src/shared/storage/configuration/connection.storage.dart';
+import 'package:mktk_app/src/vouchers/widgets/create_btn.dart';
 import 'package:mktk_app/src/vouchers/widgets/header.dart';
 
 class VouchersPage extends StatefulWidget {
@@ -11,15 +12,24 @@ class VouchersPage extends StatefulWidget {
 }
 
 class _VouchersPageState extends State<VouchersPage> {
-  ConfigurationCollection configCollection = ConfigurationCollection();
+  // ConfigurationDatabase configDB = ConfigurationDatabase();
   bool isConfig = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _init();
+    });
+  }
+
+  Future<void> _init() async {
     try {
-      Connection conn = configCollection.getConnection() ?? Connection();
-      isConfig = !conn.isEmpty;
+      List<Map<String, dynamic>> connStorage =
+          await ConnectionStorage.getConnection();
+      isConfig = connStorage.isNotEmpty;
+      debugPrint('CONN [$isConfig]: $connStorage');
+      setState(() {});
     } catch (e) {
       debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
     }
@@ -39,13 +49,14 @@ class _VouchersPageState extends State<VouchersPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('BUILD: $isConfig');
     return isConfig
         ? const Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Header(),
-              Text('Em Desenvolvimento...'),
+              CreateBtn(),
             ],
           )
         : const Center(

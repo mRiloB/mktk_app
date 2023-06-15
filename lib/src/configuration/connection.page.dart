@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/configuration/widgets/custom_input.dart';
 import 'package:mktk_app/src/shared/models/connection.model.dart';
-import 'package:mktk_app/src/shared/storage/configuration/configuration.hive.dart';
+import 'package:mktk_app/src/shared/storage/configuration/connection.storage.dart';
 
 class ConnectionPage extends StatefulWidget {
   const ConnectionPage({super.key});
@@ -15,18 +15,25 @@ class _ConnectionPageState extends State<ConnectionPage> {
   TextEditingController mktkIp = TextEditingController();
   TextEditingController mktkLogin = TextEditingController();
   TextEditingController mktkPass = TextEditingController();
-  ConfigurationCollection configCollection = ConfigurationCollection();
+  Connection conn = Connection();
+  bool isEditing = false;
 
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  void _init() async {
     try {
-      Connection hiveConnection =
-          configCollection.getConnection() ?? Connection();
-      if (!hiveConnection.isEmpty) {
-        mktkIp.text = hiveConnection.ip;
-        mktkLogin.text = hiveConnection.login;
-        mktkPass.text = hiveConnection.password;
+      List<Map<String, dynamic>> connStorage =
+          await ConnectionStorage.getConnection();
+      debugPrint('CONN: $connStorage');
+      if (connStorage.isNotEmpty) {
+        mktkIp.text = connStorage[0]['ip'];
+        mktkLogin.text = connStorage[0]['login'];
+        mktkPass.text = connStorage[0]['password'];
+        isEditing = true;
       }
     } catch (e) {
       debugPrint('=== CONNECTION PAGE INIT: ${e.toString()}');
@@ -44,13 +51,17 @@ class _ConnectionPageState extends State<ConnectionPage> {
   void _saveConnection() {
     if (_formKey.currentState!.validate()) {
       try {
-        configCollection.saveConnection(
-          Connection(
-            mktkIp.text.trim(),
-            mktkLogin.text.trim(),
-            mktkPass.text.trim(),
-          ),
+        Connection formConn = Connection(
+          mktkIp.text.trim(),
+          mktkLogin.text.trim(),
+          mktkPass.text.trim(),
         );
+        if (isEditing) {
+          ConnectionStorage.edit(formConn);
+          isEditing = false;
+        } else {
+          ConnectionStorage.create(formConn);
+        }
         _messageBox("As configurações foram salvas!");
         _clearForm();
       } catch (e) {

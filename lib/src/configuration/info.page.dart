@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/configuration/widgets/custom_input.dart';
 import 'package:mktk_app/src/shared/models/info.model.dart';
-import 'package:mktk_app/src/shared/storage/configuration/configuration.hive.dart';
+import 'package:mktk_app/src/shared/storage/configuration/info.storage.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
@@ -12,18 +12,25 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController boatName = TextEditingController();
+  TextEditingController boat = TextEditingController();
   TextEditingController seller = TextEditingController();
-  ConfigurationCollection configCollection = ConfigurationCollection();
+  Info info = Info();
+  bool isEditing = false;
 
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  void _init() async {
     try {
-      Info hiveInfo = configCollection.getInfo() ?? Info();
-      if (!hiveInfo.isEmpty) {
-        boatName.text = hiveInfo.boatName;
-        seller.text = hiveInfo.seller;
+      List<Map<String, dynamic>> infoStorage = await InfoStorage.getInfo();
+      debugPrint('INFO: $infoStorage');
+      if (infoStorage.isNotEmpty) {
+        boat.text = infoStorage[0]['boat'];
+        seller.text = infoStorage[0]['seller'];
+        isEditing = true;
       }
     } catch (e) {
       debugPrint('=== INFO PAGE INIT: ${e.toString()}');
@@ -32,7 +39,7 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   void dispose() {
-    boatName.dispose();
+    boat.dispose();
     seller.dispose();
     super.dispose();
   }
@@ -40,12 +47,16 @@ class _InfoPageState extends State<InfoPage> {
   void _saveInfo() {
     if (_formKey.currentState!.validate()) {
       try {
-        configCollection.saveInfo(
-          Info(
-            boatName.text.trim(),
-            seller.text.trim(),
-          ),
+        Info formInfo = Info(
+          boat.text.trim(),
+          seller.text.trim(),
         );
+        if (isEditing) {
+          InfoStorage.edit(formInfo);
+          isEditing = false;
+        } else {
+          InfoStorage.create(formInfo);
+        }
         _messageBox("As informações foram salvas!");
         _clearForm();
       } catch (e) {
@@ -82,7 +93,7 @@ class _InfoPageState extends State<InfoPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomInput(
-                control: boatName,
+                control: boat,
                 label: 'Nome da Embarcação',
                 placeholder: '...',
               ),

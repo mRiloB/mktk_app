@@ -1,11 +1,23 @@
 class Info {
-  late String boatName;
+  late String boat;
   late String seller;
 
-  Info([String? boatName, String? seller]) {
-    this.boatName = boatName ?? '';
+  Info([String? boat, String? seller]) {
+    this.boat = boat ?? '';
     this.seller = seller ?? '';
   }
 
-  bool get isEmpty => boatName.isEmpty && seller.isEmpty;
+  Map<String, String> toMap() {
+    return {
+      'boat': boat,
+      'seller': seller,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Info { boat: $boat, seller: $seller }';
+  }
+
+  bool get isEmpty => boat.isEmpty && seller.isEmpty;
 }
