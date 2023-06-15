@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/controllers/api.dart';
-import 'package:mktk_app/src/vouchers/widgets/voucher_btn.dart';
-import 'package:mktk_app/controllers/create_user.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:mktk_app/src/shared/models/connection.model.dart';
+import 'package:mktk_app/src/shared/storage/configuration/configuration.hive.dart';
+import 'package:mktk_app/src/vouchers/widgets/header.dart';
 
 class VouchersPage extends StatefulWidget {
   const VouchersPage({super.key});
@@ -12,118 +11,38 @@ class VouchersPage extends StatefulWidget {
 }
 
 class _VouchersPageState extends State<VouchersPage> {
-  MkTkAPI api = MkTkAPI();
-  MkTkUser user = MkTkUser();
-  final LocalStorage storage = LocalStorage('configuration.json');
-  final LocalStorage storageHistory = LocalStorage('history.json');
-  // final LocalStorage storageVoucher = LocalStorage('voucher_user.json');
-  bool isConfigured = false;
+  ConfigurationCollection configCollection = ConfigurationCollection();
+  bool isConfig = false;
 
   @override
   void initState() {
     super.initState();
     try {
-      bool isConfigLS = storage.getItem('isConfig');
-      if (isConfigLS) {
-        isConfigured = isConfigLS;
-      }
-      // _clearStorage();
+      Connection conn = configCollection.getConnection() ?? Connection();
+      isConfig = !conn.isEmpty;
     } catch (e) {
-      debugPrint('=== VOUCHERS PAGE INIT ERROR: ${e.toString()}');
+      debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
     }
   }
 
-  // void _clearStorage() async {
-  //   await storageVoucher.clear();
-  //   _messageBox('Voucher storage limpo!');
+  // void _messageBox(String text) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(text),
+  //       action: SnackBarAction(
+  //         label: 'Fechar',
+  //         onPressed: () {},
+  //       ),
+  //     ),
+  //   );
   // }
-
-  void addToHistory(Map<String, dynamic> payload) async {
-    // save the history in local storage
-    payload.addAll({"createdAt": DateTime.timestamp().toString()});
-    List<Map<String, dynamic>> vouchers = [];
-    try {
-      dynamic tempHistory = storageHistory.getItem('vouchers');
-      if (tempHistory != null) {
-        vouchers = tempHistory;
-      }
-      debugPrint("=== ADD TO HISTORY: $vouchers");
-      vouchers.add(payload);
-      await storageHistory.setItem('vouchers', vouchers);
-    } catch (e) {
-      debugPrint('=== ADD TO HISTORY ERROR: ${e.toString()}');
-    }
-    //
-  }
-
-  void _createVoucher(String profile) async {
-    try {
-      api.setConfigurations();
-      Map<String, String> userCredentials = await user.getUserAndPassword();
-      String limitUptime = user.getLimitUptime(profile);
-      Map<String, dynamic> payload = {
-        "name": userCredentials["user"]!,
-        "password": userCredentials["password"]!,
-        "server": "hotspot1",
-        "profile": profile,
-        "limit-uptime": limitUptime
-      };
-      api.cmdAdd(payload);
-      addToHistory(payload);
-      debugPrint("=== VOUCHER CRIADO: $payload");
-      _messageBox('Voucher criado!');
-    } catch (e) {
-      debugPrint("=== CREATE VOUCHER ERROR: ${e.toString()}");
-    }
-  }
-
-  void _listUsers() async {
-    try {
-      api.setConfigurations();
-      dynamic users = await api.cmdPrint("ip/hotspot/user");
-      debugPrint("=== USERS: $users");
-    } catch (e) {
-      debugPrint("=== LIST USERS ERROR: ${e.toString()}");
-    }
-  }
-
-  void _messageBox(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-        action: SnackBarAction(
-          label: 'Fechar',
-          onPressed: () {},
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return isConfigured
-        ? Column(
+    return isConfig
+        ? const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GridView.count(
-                  shrinkWrap: true,
-                  primary: false,
-                  padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 3,
-                  children: <Widget>[
-                    VoucherBtn(
-                        title: "1H", onPressed: () => _createVoucher('1h')),
-                    VoucherBtn(
-                        title: "5H", onPressed: () => _createVoucher('5h')),
-                    VoucherBtn(
-                        title: "Completa",
-                        onPressed: () => _createVoucher('Viagem-Completa')),
-                    VoucherBtn(title: "Listar", onPressed: () => _listUsers()),
-                  ]),
-              const Divider(),
-            ],
+            children: <Widget>[Header()],
           )
         : const Center(
             child: Text("Faça a configuração do aplicativo."),

@@ -40,14 +40,14 @@ class MkTkUser {
   }
 
   String generatePassword() {
-    const length = 6;
-    const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const length = 4;
+    // const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
     // const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = '0123456789';
     // const special = '@#*?!=+';
 
     String chars = "";
-    chars += letterLowerCase;
+    // chars += letterLowerCase;
     chars += number;
     // chars += special;
 
