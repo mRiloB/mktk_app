@@ -18,17 +18,17 @@ class _ProfilesPageState extends State<ProfilesPage> {
     super.dispose();
   }
 
-  void _messageBox(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-        action: SnackBarAction(
-          label: 'Fechar',
-          onPressed: () {},
-        ),
-      ),
-    );
-  }
+  // void _messageBox(String text) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(text),
+  //       action: SnackBarAction(
+  //         label: 'Fechar',
+  //         onPressed: () {},
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,7 @@ class PageAux {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static final List<PageAux> _pagesOptions = [
-    PageAux(const VouchersPage(), "Moby Vouchers v0.0.3"),
+    PageAux(const VouchersPage(), "Moby Vouchers v0.0.4"),
     PageAux(const ConfigurationPage(), "Configurações")
   ];
 

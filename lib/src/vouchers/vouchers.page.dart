@@ -41,8 +41,12 @@ class _VouchersPageState extends State<VouchersPage> {
   Widget build(BuildContext context) {
     return isConfig
         ? const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[Header()],
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Header(),
+              Text('Em Desenvolvimento...'),
+            ],
           )
         : const Center(
             child: Text("Faça a configuração do aplicativo."),
