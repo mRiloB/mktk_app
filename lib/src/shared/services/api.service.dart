@@ -66,24 +66,27 @@ class MkTkAPI {
 
   // função que roda o comando de adicionar
   Future<dynamic> cmdAdd(Map<String, dynamic> payload) async {
+    String reqBody = jsonEncode(payload);
+    debugPrint('=== PAYLOAD: $reqBody');
     final response = await http.put(
       Uri.parse(baseUrl),
+      body: reqBody,
       headers: getHeaders(),
     );
-    String body = response.body;
+    String resBody = response.body;
     int status = response.statusCode;
-    debugPrint('=== BODY $status: $body');
-    if (status == 200 || status == 201) {
-      return {
-        'ok': true,
-        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
-      };
-    } else if (status == 400) {
-      return {
-        'ok': false,
-        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
-      };
-    }
+    debugPrint('=== BODY $status: $resBody');
+    // if (status == 200 || status == 201) {
+    //   return {
+    //     'ok': true,
+    //     'data': jsonDecode(resBody).cast<Map<String, dynamic>>(),
+    //   };
+    // } else if (status == 400) {
+    //   return {
+    //     'ok': false,
+    //     'data': jsonDecode(resBody).cast<Map<String, dynamic>>(),
+    //   };
+    // }
   }
 
   // função que roda o comando de remover

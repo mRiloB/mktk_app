@@ -95,7 +95,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
                   'name': el['name'] as String,
                 })
             .toList();
-        dropdownValue = "${mktkList.first['id']} | ${mktkList.first['name']}";
+        dropdownValue = "${mktkList.first['id']}|${mktkList.first['name']}";
       });
       debugPrint('Value: $dropdownValue');
       debugPrint('List: $mktkList');
@@ -230,7 +230,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
                   items: mktkList.map<DropdownMenuItem<String>>((el) {
                     debugPrint('el: $el');
                     return DropdownMenuItem<String>(
-                      value: "${el['id']} | ${el['name']}",
+                      value: "${el['id']}|${el['name']}",
                       child: Text("${el['name']}"),
                     );
                   }).toList(),

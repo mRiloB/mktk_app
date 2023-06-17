@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:mktk_app/src/shared/models/profile.model.dart';
 import 'package:mktk_app/src/shared/services/database.service.dart';
 import 'package:sqflite/sqflite.dart' as sql;
