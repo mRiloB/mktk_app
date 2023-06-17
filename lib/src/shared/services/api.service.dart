@@ -19,8 +19,9 @@ class MkTkAPI {
   String ip = '';
   String login = '';
   String password = '';
+  String cmd;
 
-  MkTkAPI() {
+  MkTkAPI(this.cmd) {
     setConfigurations();
   }
 
@@ -32,7 +33,7 @@ class MkTkAPI {
         ip = aux['ip'];
         login = aux['login'];
         password = aux['password'];
-        baseUrl = 'https://$ip/rest';
+        baseUrl = 'https://$ip/rest$cmd';
         debugPrint("=== SET CONFIG: $ip | $login | $password | $baseUrl");
       }
     } catch (e) {
@@ -47,27 +48,64 @@ class MkTkAPI {
   Map<String, String> getHeaders() {
     return {
       'Authorization': getBasicAuth(),
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     };
   }
 
-  // função que roda o comando de listar users (vouchers)
-  Future<dynamic> cmdPrint(String cmd) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/$cmd'), headers: getHeaders());
-    debugPrint('=== BODY ${response.statusCode}: ${response.body}');
-    if (response.statusCode == 200) {
-      return response.body;
+  // função que roda o comando de listar
+  Future<dynamic> cmdPrint() async {
+    final response = await http.get(
+      Uri.parse(baseUrl),
+      headers: getHeaders(),
+    );
+    String body = response.body;
+    int status = response.statusCode;
+    debugPrint('=== BODY $status: $body');
+    return jsonDecode(body);
+  }
+
+  // função que roda o comando de adicionar
+  Future<dynamic> cmdAdd(Map<String, dynamic> payload) async {
+    final response = await http.put(
+      Uri.parse(baseUrl),
+      headers: getHeaders(),
+    );
+    String body = response.body;
+    int status = response.statusCode;
+    debugPrint('=== BODY $status: $body');
+    if (status == 200 || status == 201) {
+      return {
+        'ok': true,
+        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
+      };
+    } else if (status == 400) {
+      return {
+        'ok': false,
+        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
+      };
     }
   }
 
-  // função que roda o comando de adicionar users (vouchers)
-  void cmdAdd(String cmd, Map<String, dynamic> payload) async {
-    final response = await http.put(Uri.parse('$baseUrl$cmd'),
-        body: jsonEncode(payload), headers: getHeaders());
-    debugPrint('=== BODY ${response.statusCode}: ${response.body}');
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return;
+  // função que roda o comando de remover
+  Future<dynamic> cmdRemove(String id) async {
+    debugPrint('DELETE PROFILE [$baseUrl/$id]: $id');
+    final response = await http.delete(
+      Uri.parse('$baseUrl/$id'),
+      headers: getHeaders(),
+    );
+    String body = response.body;
+    int status = response.statusCode;
+    debugPrint('=== BODY $status: [${body.runtimeType}] $body');
+    if (status == 204) {
+      return {
+        'ok': true,
+        'detail': 'O profile foi removido!',
+      };
+    } else if (status == 400) {
+      return {
+        'ok': false,
+        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
+      };
     }
   }
 }

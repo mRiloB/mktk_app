@@ -24,11 +24,11 @@ class _HeaderState extends State<Header> {
   void _init() async {
     try {
       List<Map<String, dynamic>> infoStorage = await InfoStorage.getInfo();
-      debugPrint('INFO: $infoStorage');
       if (infoStorage.isNotEmpty) {
-        _boat = infoStorage[0]['boat'];
+        setState(() {
+          _boat = infoStorage[0]['boat'];
+        });
       }
-      setState(() {});
     } catch (e) {
       debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
     }

@@ -21,7 +21,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
   @override
   void initState() {
     super.initState();
-    _init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _init();
+    });
   }
 
   void _init() async {
@@ -30,10 +32,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
           await ConnectionStorage.getConnection();
       debugPrint('CONN: $connStorage');
       if (connStorage.isNotEmpty) {
-        mktkIp.text = connStorage[0]['ip'];
-        mktkLogin.text = connStorage[0]['login'];
-        mktkPass.text = connStorage[0]['password'];
-        isEditing = true;
+        setState(() {
+          mktkIp.text = connStorage[0]['ip'];
+          mktkLogin.text = connStorage[0]['login'];
+          mktkPass.text = connStorage[0]['password'];
+          isEditing = true;
+        });
       }
     } catch (e) {
       debugPrint('=== CONNECTION PAGE INIT: ${e.toString()}');

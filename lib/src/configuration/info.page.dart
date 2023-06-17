@@ -20,7 +20,9 @@ class _InfoPageState extends State<InfoPage> {
   @override
   void initState() {
     super.initState();
-    _init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _init();
+    });
   }
 
   void _init() async {
@@ -28,9 +30,11 @@ class _InfoPageState extends State<InfoPage> {
       List<Map<String, dynamic>> infoStorage = await InfoStorage.getInfo();
       debugPrint('INFO: $infoStorage');
       if (infoStorage.isNotEmpty) {
-        boat.text = infoStorage[0]['boat'];
-        seller.text = infoStorage[0]['seller'];
-        isEditing = true;
+        setState(() {
+          boat.text = infoStorage[0]['boat'];
+          seller.text = infoStorage[0]['seller'];
+          isEditing = true;
+        });
       }
     } catch (e) {
       debugPrint('=== INFO PAGE INIT: ${e.toString()}');

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:mktk_app/src/shared/models/connection.model.dart';
 import 'package:mktk_app/src/shared/storage/configuration/connection.storage.dart';
 import 'package:mktk_app/src/vouchers/widgets/create_btn.dart';
 import 'package:mktk_app/src/vouchers/widgets/header.dart';
@@ -12,7 +11,6 @@ class VouchersPage extends StatefulWidget {
 }
 
 class _VouchersPageState extends State<VouchersPage> {
-  // ConfigurationDatabase configDB = ConfigurationDatabase();
   bool isConfig = false;
 
   @override
@@ -27,9 +25,9 @@ class _VouchersPageState extends State<VouchersPage> {
     try {
       List<Map<String, dynamic>> connStorage =
           await ConnectionStorage.getConnection();
-      isConfig = connStorage.isNotEmpty;
-      debugPrint('CONN [$isConfig]: $connStorage');
-      setState(() {});
+      setState(() {
+        isConfig = connStorage.isNotEmpty;
+      });
     } catch (e) {
       debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
     }
@@ -49,7 +47,6 @@ class _VouchersPageState extends State<VouchersPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('BUILD: $isConfig');
     return isConfig
         ? const Column(
             crossAxisAlignment: CrossAxisAlignment.center,
