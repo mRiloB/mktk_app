@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/configuration/connection.page.dart';
-import 'package:mktk_app/src/configuration/info.page.dart';
-import 'package:mktk_app/src/configuration/profiles.page.dart';
+import 'package:mktk_app/src/configuration/widgets/grid_btn.dart';
+import 'package:mktk_app/src/shared/widgets/access_config.dart';
 
 class ConfigurationPage extends StatefulWidget {
   const ConfigurationPage({super.key});
@@ -11,6 +10,8 @@ class ConfigurationPage extends StatefulWidget {
 }
 
 class _ConfigurationPageState extends State<ConfigurationPage> {
+  final TextStyle textStyle = const TextStyle(color: Colors.white);
+
   @override
   void initState() {
     super.initState();
@@ -21,34 +22,66 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
     super.dispose();
   }
 
+  void _navigate(String route) {
+    Navigator.pushNamed(context, route);
+  }
+
+  Future<void> accessConfig(String route) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: AccessConfig(
+            label: 'Senha Moby',
+            route: '/config/$route',
+            password: '1894',
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: DefaultTabController(
-        initialIndex: 0,
-        length: 3,
-        child: Scaffold(
-          appBar: TabBar(
-            tabs: <Widget>[
-              Tab(
-                text: 'Embarcação',
-              ),
-              Tab(
-                text: 'Conexão',
-              ),
-              Tab(
-                text: 'Profiles',
-              ),
-            ],
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              InfoPage(),
-              ConnectionPage(),
-              ProfilesPage(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        toolbarTextStyle: textStyle,
+        title: Text(
+          'Configurações',
+          style: textStyle,
         ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+        ),
+      ),
+      body: GridView.count(
+        primary: true,
+        padding: const EdgeInsets.all(10.0),
+        crossAxisCount: 3,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        children: [
+          GridBtn(
+            Icons.directions_boat,
+            'Embarcação',
+            () => _navigate('/config/info'),
+          ),
+          GridBtn(
+            Icons.wifi,
+            'Conexão',
+            () => accessConfig('connection'),
+          ),
+          GridBtn(
+            Icons.recent_actors,
+            'Profiles',
+            () => accessConfig('profiles'),
+          ),
+        ],
       ),
     );
   }

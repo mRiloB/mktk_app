@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/configuration/widgets/custom_input.dart';
 import 'package:mktk_app/src/shared/models/info.model.dart';
 import 'package:mktk_app/src/shared/storage/configuration/info.storage.dart';
+import 'package:mktk_app/src/shared/widgets/default_btn.dart';
+import 'package:mktk_app/src/shared/widgets/loader.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
@@ -16,6 +18,7 @@ class _InfoPageState extends State<InfoPage> {
   TextEditingController seller = TextEditingController();
   Info info = Info();
   bool isEditing = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -23,6 +26,13 @@ class _InfoPageState extends State<InfoPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _init();
     });
+  }
+
+  @override
+  void dispose() {
+    boat.dispose();
+    seller.dispose();
+    super.dispose();
   }
 
   void _init() async {
@@ -41,31 +51,27 @@ class _InfoPageState extends State<InfoPage> {
     }
   }
 
-  @override
-  void dispose() {
-    boat.dispose();
-    seller.dispose();
-    super.dispose();
-  }
-
-  void _saveInfo() {
+  void _saveInfo() async {
     if (_formKey.currentState!.validate()) {
+      setLoading(true);
       try {
         Info formInfo = Info(
           boat.text.trim(),
           seller.text.trim(),
         );
         if (isEditing) {
-          InfoStorage.edit(formInfo);
+          await InfoStorage.edit(formInfo);
           isEditing = false;
         } else {
-          InfoStorage.create(formInfo);
+          await InfoStorage.create(formInfo);
         }
         _messageBox("As informações foram salvas!");
         _clearForm();
       } catch (e) {
         debugPrint('=== INFO PAGE SAVE ERROR: ${e.toString()}');
         _messageBox(e.toString());
+      } finally {
+        setLoading(false);
       }
     }
   }
@@ -82,6 +88,12 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
+  void setLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
+
   void _clearForm() {
     _formKey.currentState?.reset();
   }
@@ -89,6 +101,19 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text(
+          'Embarcação',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.white,
+        ),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -106,13 +131,12 @@ class _InfoPageState extends State<InfoPage> {
                 control: seller,
                 placeholder: 'Fulano de tal',
               ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _saveInfo,
-                  child: const Text('Salvar'),
-                ),
-              ),
+              isLoading
+                  ? const Loader()
+                  : DefaultBtn(
+                      text: 'Salvar',
+                      onPressed: _saveInfo,
+                    ),
             ],
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:mktk_app/src/configuration/widgets/search_btn.dart';
 import 'package:mktk_app/src/shared/models/profile.model.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/shared/storage/configuration/profile.storage.dart';
+import 'package:mktk_app/src/shared/widgets/loader.dart';
 
 class ProfilesPage extends StatefulWidget {
   const ProfilesPage({super.key});
@@ -271,33 +272,46 @@ class _ProfilesPageState extends State<ProfilesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView(
-                    children: profiles.isNotEmpty
-                        ? profiles
-                        : [
-                            const Text('Nenhum profile cadastrado...'),
-                          ],
-                  ),
-          ),
-          SearchBtn(
-            onPressed: () async {
-              await loadMkTkProfiles();
-              showVoucher(context);
-            },
-            title: 'Adicionar',
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text(
+          'Profiles',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.white,
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: isLoading
+                  ? const Loader()
+                  : ListView(
+                      children: profiles.isNotEmpty
+                          ? profiles
+                          : [
+                              const Text('Nenhum profile cadastrado...'),
+                            ],
+                    ),
+            ),
+            SearchBtn(
+              onPressed: () async {
+                await loadMkTkProfiles();
+                showVoucher(context);
+              },
+              title: 'Adicionar',
+            ),
+          ],
+        ),
       ),
     );
   }

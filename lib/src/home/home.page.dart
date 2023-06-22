@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/configuration/configuration.page.dart';
-import 'package:mktk_app/src/vouchers/vouchers.page.dart';
+import 'package:mktk_app/src/shared/widgets/access_config.dart';
+import 'package:mktk_app/src/shared/storage/configuration/connection.storage.dart';
+import 'package:mktk_app/src/vouchers/widgets/create_btn.dart';
+import 'package:mktk_app/src/vouchers/widgets/header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,23 +18,45 @@ class PageAux {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-  static final List<PageAux> _pagesOptions = [
-    PageAux(const VouchersPage(), "Moby Vouchers v0.0.7"),
-    PageAux(const ConfigurationPage(), "Configurações")
-  ];
+  String version = 'v0.0.8';
+  bool isConfig = false;
 
-  BottomNavigationBarItem _createBNBtn(Icon icon, String label) {
-    return BottomNavigationBarItem(
-      icon: icon,
-      label: label,
-    );
+  @override
+  void initState() {
+    super.initState();
+    _init();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _init() async {
+    debugPrint("=============== init");
+    try {
+      List<Map<String, dynamic>> connStorage =
+          await ConnectionStorage.getConnection();
+      debugPrint('CONN: $connStorage');
+      if (connStorage.isNotEmpty) {
+        setState(() {
+          isConfig = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('=== HOME PAGE INIT: ${e.toString()}');
+    }
+  }
+
+  Future<void> accessConfig() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: AccessConfig(
+            label: 'Senha do vendedor',
+            route: '/config',
+            password: '0000',
+            altNavigator: () {},
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -41,25 +65,33 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          _pagesOptions[_selectedIndex].title,
+          "Moby Vouchers $version",
           style: const TextStyle(color: Colors.white),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: <BottomNavigationBarItem>[
-          _createBNBtn(
-            const Icon(Icons.home),
-            'Home',
-          ),
-          _createBNBtn(
-            const Icon(Icons.settings),
-            'Configurações',
-          ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/config').then((value) {
+                _init();
+              });
+            },
+            icon: const Icon(Icons.settings),
+            color: Colors.white,
+          )
         ],
       ),
-      body: _pagesOptions[_selectedIndex].screen,
+      body: isConfig
+          ? const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Header(),
+                CreateBtn(),
+              ],
+            )
+          : const Center(
+              child: Text("Faça a configuração do aplicativo."),
+            ),
     );
   }
 }

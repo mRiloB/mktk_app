@@ -16,7 +16,9 @@ class VoucherStorage {
           server TEXT,
           profile TEXT,
           limit_uptime TEXT,
-          price REAL
+          price REAL,
+          createdAt TEXT,
+          updatedAt TEXT
         )
       ''',
     );

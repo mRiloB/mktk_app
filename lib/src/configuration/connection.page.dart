@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/configuration/widgets/custom_input.dart';
 import 'package:mktk_app/src/shared/models/connection.model.dart';
 import 'package:mktk_app/src/shared/storage/configuration/connection.storage.dart';
+import 'package:mktk_app/src/shared/widgets/default_btn.dart';
+import 'package:mktk_app/src/shared/widgets/loader.dart';
 
 class ConnectionPage extends StatefulWidget {
   const ConnectionPage({super.key});
@@ -17,6 +19,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
   TextEditingController mktkPass = TextEditingController();
   Connection conn = Connection();
   bool isEditing = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -24,6 +27,14 @@ class _ConnectionPageState extends State<ConnectionPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _init();
     });
+  }
+
+  @override
+  void dispose() {
+    mktkIp.dispose();
+    mktkLogin.dispose();
+    mktkPass.dispose();
+    super.dispose();
   }
 
   void _init() async {
@@ -44,16 +55,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
     }
   }
 
-  @override
-  void dispose() {
-    mktkIp.dispose();
-    mktkLogin.dispose();
-    mktkPass.dispose();
-    super.dispose();
-  }
-
-  void _saveConnection() {
+  void _saveConnection() async {
     if (_formKey.currentState!.validate()) {
+      setLoading(true);
       try {
         Connection formConn = Connection(
           mktkIp.text.trim(),
@@ -61,16 +65,18 @@ class _ConnectionPageState extends State<ConnectionPage> {
           mktkPass.text.trim(),
         );
         if (isEditing) {
-          ConnectionStorage.edit(formConn);
+          await ConnectionStorage.edit(formConn);
           isEditing = false;
         } else {
-          ConnectionStorage.create(formConn);
+          await ConnectionStorage.create(formConn);
         }
         _messageBox("As configurações foram salvas!");
         _clearForm();
       } catch (e) {
         debugPrint('=== CONNECTION PAGE SAVE ERROR: ${e.toString()}');
         _messageBox(e.toString());
+      } finally {
+        setLoading(false);
       }
     }
   }
@@ -87,6 +93,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
     );
   }
 
+  void setLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
+
   void _clearForm() {
     _formKey.currentState?.reset();
   }
@@ -94,10 +106,23 @@ class _ConnectionPageState extends State<ConnectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text(
+          'Conexão',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.white,
+        ),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,22 +143,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   placeholder: '********',
                   noValid: true,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _saveConnection,
-                    child: const Text('Salvar'),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      debugPrint('');
-                    },
-                    child: const Text('Resetar Configurações'),
-                  ),
-                ),
+                isLoading
+                    ? const Loader()
+                    : DefaultBtn(
+                        onPressed: _saveConnection,
+                        text: 'Salvar',
+                      ),
               ],
             ),
           ),

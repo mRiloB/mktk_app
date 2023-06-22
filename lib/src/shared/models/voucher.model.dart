@@ -7,6 +7,8 @@ class Voucher {
   late String profile;
   late String limitUptime;
   late double price;
+  late String createdAt;
+  late String updatedAt;
 
   Voucher({
     int? id,
@@ -15,6 +17,8 @@ class Voucher {
     String? profile,
     String? limitUptime,
     double? price,
+    String? createdAt,
+    String? updatedAt,
   }) {
     this.id = id ?? 0;
     this.name = name ?? '';
@@ -22,6 +26,8 @@ class Voucher {
     this.profile = profile ?? '';
     this.limitUptime = limitUptime ?? '';
     this.price = price ?? 0.0;
+    this.createdAt = createdAt ?? '';
+    this.updatedAt = updatedAt ?? '';
   }
 
   Map<String, dynamic> toMap([bool noId = false]) {
@@ -31,7 +37,9 @@ class Voucher {
       "server": server,
       "profile": profile,
       "limit_uptime": limitUptime,
-      "price": price.toString()
+      "price": price.toString(),
+      "createdAt": createdAt,
+      "updatedAt": updatedAt,
     };
     if (noId) map.remove('id');
     return map;
@@ -39,18 +47,18 @@ class Voucher {
 
   @override
   String toString() {
-    return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price }';
+    return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt }';
   }
 
   static String generateVoucher() {
     const length = 4;
-    const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
-    // const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const number = '0123456789';
     // const special = '@#*?!=+';
 
     String chars = "";
-    chars += letterLowerCase;
+    chars += letterUpperCase;
     chars += number;
 
     return List.generate(length, (index) {
