@@ -21,13 +21,13 @@ class VoucherForm extends StatefulWidget {
 class _VoucherFormState extends State<VoucherForm> {
   bool isLoading = false;
   List<Map<String, dynamic>> profiles = [];
-  String dropdownValue = '';
+  String dropdownValue = 'Viagem Completa|2d 12h|35.0';
   MkTkAPI api = MkTkAPI('/ip/hotspot/user');
 
   @override
   void initState() {
     super.initState();
-    _loadProfiles();
+    // _loadProfiles();
   }
 
   Future<void> _loadProfiles() async {
@@ -77,15 +77,15 @@ class _VoucherFormState extends State<VoucherForm> {
         profile: profileInfo[0],
         limitUptime: profileInfo[1],
         price: double.parse(profileInfo[2]),
-        createdAt: DateTime.timestamp().toString(),
+        createdAt: DateTime.now().toString(),
       );
       debugPrint('NEW VOUCHER: $newVoucher');
-      await api.cmdAdd({
-        "name": newVoucher.name,
-        "server": newVoucher.server,
-        "profile": newVoucher.profile,
-        "limit-uptime": newVoucher.limitUptime,
-      });
+      // await api.cmdAdd({
+      //   "name": newVoucher.name,
+      //   "server": newVoucher.server,
+      //   "profile": newVoucher.profile,
+      //   "limit-uptime": newVoucher.limitUptime,
+      // });
       await VoucherStorage.create(newVoucher);
     } catch (e) {
       debugPrint('=== CREATE VOUCHER ERROR: ${e.toString()}');
@@ -101,7 +101,7 @@ class _VoucherFormState extends State<VoucherForm> {
     setState(() {
       isLoading = true;
     });
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 2));
     setState(() {
       isLoading = false;
     });
@@ -131,8 +131,8 @@ class _VoucherFormState extends State<VoucherForm> {
           ),
         ),
         onPressed: ([bool mounted = true]) async {
+          await awaitTestFunction();
           await createVoucher();
-          // await awaitTestFunction();
           if (!mounted) return;
           Navigator.pop(context);
         },

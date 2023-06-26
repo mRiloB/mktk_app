@@ -17,7 +17,8 @@ class _CreateBtnState extends State<CreateBtn> {
   Future<void> createVoucher(BuildContext context,
       [bool mounted = true]) async {
     String voucher = Voucher.generateVoucher();
-    List<Map<String, dynamic>> result = await VoucherStorage.getInfo(voucher);
+    List<Map<String, dynamic>> result =
+        await VoucherStorage.getInfo(name: voucher);
     debugPrint('PROFILES: $result');
     if (!mounted) return;
     if (result.isEmpty) {
@@ -55,8 +56,3 @@ class _CreateBtnState extends State<CreateBtn> {
     );
   }
 }
-// () async {
-//   await _loadProfiles();
-//   if (!mounted) return;
-//   await showVoucher(context);
-// }

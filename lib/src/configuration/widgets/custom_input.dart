@@ -6,16 +6,20 @@ class CustomInput extends StatelessWidget {
       required this.control,
       required this.label,
       this.placeholder,
-      this.noValid = false});
+      this.noValid = false,
+      this.margin = 20.0,
+      this.onChanged});
   final TextEditingController control;
   final String label;
   final String? placeholder;
   final bool noValid;
+  final double margin;
+  final void Function()? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: margin),
       child: TextFormField(
         controller: control,
         validator: !noValid
@@ -27,9 +31,11 @@ class CustomInput extends StatelessWidget {
               }
             : null,
         decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            hintText: placeholder,
-            labelText: label),
+          border: const OutlineInputBorder(),
+          hintText: placeholder,
+          labelText: label,
+        ),
+        onChanged: (value) => onChanged?.call(),
       ),
     );
   }

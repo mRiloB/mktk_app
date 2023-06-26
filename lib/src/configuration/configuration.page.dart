@@ -72,8 +72,18 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             () => _navigate('/config/info'),
           ),
           GridBtn(
+            Icons.bluetooth,
+            'Bluetooth',
+            () => _navigate('/config/bluetooth'),
+          ),
+          GridBtn(
+            Icons.receipt_long_rounded,
+            'Relatório',
+            () => accessConfig('report'),
+          ),
+          GridBtn(
             Icons.wifi,
-            'Conexão',
+            'Mikrotik',
             () => accessConfig('connection'),
           ),
           GridBtn(

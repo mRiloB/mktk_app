@@ -18,7 +18,7 @@ class PageAux {
 }
 
 class _HomePageState extends State<HomePage> {
-  String version = 'v0.0.8';
+  String version = 'v1.0.0b';
   bool isConfig = false;
 
   @override

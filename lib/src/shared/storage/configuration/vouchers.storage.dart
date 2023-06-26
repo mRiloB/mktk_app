@@ -34,8 +34,11 @@ class VoucherStorage {
     return id;
   }
 
-  static Future<List<Map<String, dynamic>>> getInfo(String name) async {
+  static Future<List<Map<String, dynamic>>> getInfo({String name = ''}) async {
     final db = await VoucherStorage._database();
-    return db.query(_table, where: 'name = ?', whereArgs: [name]);
+    if (name.isNotEmpty) {
+      return db.query(_table, where: 'name = ?', whereArgs: [name]);
+    }
+    return db.query(_table);
   }
 }
