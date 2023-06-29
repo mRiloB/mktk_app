@@ -66,30 +66,33 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
         children: [
+          // GridBtn(
+          //   Icons.directions_boat,
+          //   'Embarcação',
+          //   () => _navigate('/config/info'),
+          // ),
           GridBtn(
-            Icons.directions_boat,
-            'Embarcação',
-            () => _navigate('/config/info'),
+            Icons.wifi,
+            'Mikrotik',
+            () => _navigate('/config/connection'),
           ),
+
+          GridBtn(
+            Icons.recent_actors,
+            'Profiles',
+            () => _navigate('/config/profiles'),
+          ),
+
           GridBtn(
             Icons.bluetooth,
             'Bluetooth',
             () => _navigate('/config/bluetooth'),
           ),
+
           GridBtn(
             Icons.receipt_long_rounded,
             'Relatório',
-            () => accessConfig('report'),
-          ),
-          GridBtn(
-            Icons.wifi,
-            'Mikrotik',
-            () => accessConfig('connection'),
-          ),
-          GridBtn(
-            Icons.recent_actors,
-            'Profiles',
-            () => accessConfig('profiles'),
+            () => _navigate('/config/report'),
           ),
         ],
       ),

@@ -76,6 +76,7 @@ class MkTkAPI {
     String resBody = response.body;
     int status = response.statusCode;
     debugPrint('=== BODY $status: $resBody');
+    return status;
     // if (status == 200 || status == 201) {
     //   return {
     //     'ok': true,
@@ -91,24 +92,13 @@ class MkTkAPI {
 
   // função que roda o comando de remover
   Future<dynamic> cmdRemove(String id) async {
-    debugPrint('DELETE PROFILE [$baseUrl/$id]: $id');
+    debugPrint('DELETE [$baseUrl/$id]: $id');
     final response = await http.delete(
       Uri.parse('$baseUrl/$id'),
       headers: getHeaders(),
     );
-    String body = response.body;
+    String resBody = response.body;
     int status = response.statusCode;
-    debugPrint('=== BODY $status: [${body.runtimeType}] $body');
-    if (status == 204) {
-      return {
-        'ok': true,
-        'detail': 'O profile foi removido!',
-      };
-    } else if (status == 400) {
-      return {
-        'ok': false,
-        'data': jsonDecode(body).cast<Map<String, dynamic>>(),
-      };
-    }
+    debugPrint('=== BODY $status: $resBody');
   }
 }

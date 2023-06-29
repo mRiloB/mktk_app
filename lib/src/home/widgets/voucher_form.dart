@@ -1,7 +1,9 @@
+import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/models/profile.model.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
+import 'package:mktk_app/src/shared/services/printer.service.dart';
 import 'package:mktk_app/src/shared/storage/configuration/profile.storage.dart';
 import 'package:mktk_app/src/shared/storage/configuration/vouchers.storage.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
@@ -20,14 +22,22 @@ class VoucherForm extends StatefulWidget {
 
 class _VoucherFormState extends State<VoucherForm> {
   bool isLoading = false;
+  bool connected = false;
   List<Map<String, dynamic>> profiles = [];
-  String dropdownValue = 'Viagem Completa|2d 12h|35.0';
+  List<Map<String, dynamic>> payments = [
+    {'text': 'Espécie', 'value': 'espécie'},
+    {'text': 'PIX', 'value': 'pix'},
+    {'text': 'Débito', 'value': 'débito'},
+    {'text': 'Crédito', 'value': 'crédito'},
+  ];
+  String dropdownValue = '';
+  String paymentValue = 'espécie';
   MkTkAPI api = MkTkAPI('/ip/hotspot/user');
 
   @override
   void initState() {
     super.initState();
-    // _loadProfiles();
+    _loadProfiles();
   }
 
   Future<void> _loadProfiles() async {
@@ -62,6 +72,39 @@ class _VoucherFormState extends State<VoucherForm> {
     }
   }
 
+  Future<void> initBluetooth() async {
+    BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
+    try {
+      bool isConnected = await bluetoothPrint.isConnected ?? false;
+
+      bluetoothPrint.state.listen((state) {
+        debugPrint('******************* cur device status: $state');
+        switch (state) {
+          case BluetoothPrint.CONNECTED:
+            setState(() {
+              connected = true;
+            });
+            break;
+          case BluetoothPrint.DISCONNECTED:
+            setState(() {
+              connected = false;
+            });
+            break;
+          default:
+            break;
+        }
+      });
+
+      if (isConnected) {
+        setState(() {
+          connected = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Verifique se o bluetooth está ligado! 2');
+    }
+  }
+
   Future<void> createVoucher() async {
     String voucher = widget.voucher;
 
@@ -69,24 +112,34 @@ class _VoucherFormState extends State<VoucherForm> {
       isLoading = true;
     });
 
-    try {
-      List<String> profileInfo = dropdownValue.split('|');
-      Voucher newVoucher = Voucher(
+    List<String> profileInfo = dropdownValue.split('|');
+    Voucher newVoucher = Voucher(
         name: voucher,
         server: 'all',
         profile: profileInfo[0],
         limitUptime: profileInfo[1],
         price: double.parse(profileInfo[2]),
         createdAt: DateTime.now().toString(),
-      );
-      debugPrint('NEW VOUCHER: $newVoucher');
-      // await api.cmdAdd({
-      //   "name": newVoucher.name,
-      //   "server": newVoucher.server,
-      //   "profile": newVoucher.profile,
-      //   "limit-uptime": newVoucher.limitUptime,
-      // });
+        payment: paymentValue);
+    debugPrint('NEW VOUCHER: $newVoucher');
+    try {
+      dynamic resApi = await api.cmdAdd({
+        "name": newVoucher.name,
+        "server": newVoucher.server,
+        "profile": newVoucher.profile,
+        "limit-uptime": newVoucher.limitUptime,
+      });
+      if (resApi == 400) {
+        _messageBox(
+            'Esse voucher já existe! Repita o processo para gerar outro voucher!');
+        return;
+      }
       await VoucherStorage.create(newVoucher);
+      if (connected) {
+        await PrinterService.printVoucher(newVoucher);
+      }
+
+      _messageBox('Voucher criado com sucesso!');
     } catch (e) {
       debugPrint('=== CREATE VOUCHER ERROR: ${e.toString()}');
       _messageBox(e.toString());
@@ -131,7 +184,7 @@ class _VoucherFormState extends State<VoucherForm> {
           ),
         ),
         onPressed: ([bool mounted = true]) async {
-          await awaitTestFunction();
+          await initBluetooth();
           await createVoucher();
           if (!mounted) return;
           Navigator.pop(context);
@@ -200,6 +253,31 @@ class _VoucherFormState extends State<VoucherForm> {
               ),
             ),
             Text('Preço: ${dropdownValue.split('|').last}'),
+            Container(
+              margin: const EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                value: paymentValue,
+                onChanged: (String? value) {
+                  setState(() {
+                    paymentValue = value!;
+                  });
+                },
+                items: payments.map<DropdownMenuItem<String>>((el) {
+                  dynamic text = el['text'], value = el['value'];
+                  return DropdownMenuItem<String>(
+                    value: "$value",
+                    child: Text("$text"),
+                  );
+                }).toList(),
+              ),
+            ),
             isLoading
                 ? Container(
                     margin: const EdgeInsets.only(top: 20.0),

@@ -9,17 +9,18 @@ class Voucher {
   late double price;
   late String createdAt;
   late String updatedAt;
+  late String payment;
 
-  Voucher({
-    int? id,
-    String? name,
-    String? server,
-    String? profile,
-    String? limitUptime,
-    double? price,
-    String? createdAt,
-    String? updatedAt,
-  }) {
+  Voucher(
+      {int? id,
+      String? name,
+      String? server,
+      String? profile,
+      String? limitUptime,
+      double? price,
+      String? createdAt,
+      String? updatedAt,
+      String? payment}) {
     this.id = id ?? 0;
     this.name = name ?? '';
     this.server = server ?? '';
@@ -28,6 +29,7 @@ class Voucher {
     this.price = price ?? 0.0;
     this.createdAt = createdAt ?? '';
     this.updatedAt = updatedAt ?? '';
+    this.payment = payment ?? '';
   }
 
   Map<String, dynamic> toMap([bool noId = false]) {
@@ -40,6 +42,7 @@ class Voucher {
       "price": price.toString(),
       "createdAt": createdAt,
       "updatedAt": updatedAt,
+      "payment": payment
     };
     if (noId) map.remove('id');
     return map;
@@ -47,7 +50,7 @@ class Voucher {
 
   @override
   String toString() {
-    return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt }';
+    return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt, payment: $payment }';
   }
 
   static String generateVoucher() {

@@ -114,7 +114,9 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                   const Text('actions'),
                   const Divider(),
-                  VoucherList(vouchers: vouchers),
+                  VoucherList(
+                    vouchers: vouchersFiltered,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

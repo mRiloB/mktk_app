@@ -11,28 +11,28 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   // ConfigurationDatabase configDB = ConfigurationDatabase();
-  String _boat = '...';
+  final String _boat = 'Parintins';
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _init();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _init();
+    // });
   }
 
-  void _init() async {
-    try {
-      List<Map<String, dynamic>> infoStorage = await InfoStorage.getInfo();
-      if (infoStorage.isNotEmpty) {
-        setState(() {
-          _boat = infoStorage[0]['boat'];
-        });
-      }
-    } catch (e) {
-      debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
-    }
-  }
+  // void _init() async {
+  //   try {
+  //     List<Map<String, dynamic>> infoStorage = await InfoStorage.getInfo();
+  //     if (infoStorage.isNotEmpty) {
+  //       setState(() {
+  //         _boat = infoStorage[0]['boat'];
+  //       });
+  //     }
+  //   } catch (e) {
+  //     debugPrint('=== VOUCHERS PAGE INIT: ${e.toString()}');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

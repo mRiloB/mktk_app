@@ -18,7 +18,8 @@ class VoucherStorage {
           limit_uptime TEXT,
           price REAL,
           createdAt TEXT,
-          updatedAt TEXT
+          updatedAt TEXT,
+          payment TEXT
         )
       ''',
     );
@@ -40,5 +41,26 @@ class VoucherStorage {
       return db.query(_table, where: 'name = ?', whereArgs: [name]);
     }
     return db.query(_table);
+  }
+
+  static Future<int> edit(Voucher voucher) async {
+    final db = await VoucherStorage._database();
+    int id = await db.update(
+      _table,
+      voucher.toMap(),
+      where: 'id = ?',
+      whereArgs: [voucher.id],
+    );
+    return id;
+  }
+
+  static Future<int> delete(Voucher voucher) async {
+    final db = await VoucherStorage._database();
+    int id = await db.delete(
+      _table,
+      where: 'id = ?',
+      whereArgs: [voucher.id],
+    );
+    return id;
   }
 }
