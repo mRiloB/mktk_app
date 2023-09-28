@@ -1,19 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/configuration/bluetooth.page.dart';
-import 'package:mktk_app/src/configuration/configuration.page.dart';
-import 'package:mktk_app/src/configuration/connection.page.dart';
-import 'package:mktk_app/src/configuration/info.page.dart';
-import 'package:mktk_app/src/configuration/profiles.page.dart';
-import 'package:mktk_app/src/configuration/report.page.dart';
-import 'package:mktk_app/src/home/home.page.dart';
-import 'package:mktk_app/src/shared/themes/color_schemes.g.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'src/shared/services/api.service.dart';
+import 'package:mktk_app/supabase.env.dart';
+import 'package:mktk_app/src/ui/splash/splash.page.dart';
+import 'package:mktk_app/src/ui/validation/validation.page.dart';
+import 'package:mktk_app/src/ui/home/home.page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  await Supabase.initialize(url: sbUrl, anonKey: sbAnonKey);
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,25 +21,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Moby App',
+      title: 'Moby Vouchers',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: lightColorScheme,
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: darkColorScheme,
-      ),
       routes: {
-        '/': (context) => const HomePage(),
-        '/config': (context) => const ConfigurationPage(),
-        '/config/info': (context) => const InfoPage(),
-        '/config/connection': (context) => const ConnectionPage(),
-        '/config/profiles': (context) => const ProfilesPage(),
-        '/config/bluetooth': (context) => const BluetoothPage(),
-        '/config/report': (context) => const ReportPage(),
+        '/': (context) => const SplashPage(),
+        '/validation': (context) => const ValidationPage(),
+        '/home': (context) => const HomePage(),
       },
       initialRoute: '/',
     );
