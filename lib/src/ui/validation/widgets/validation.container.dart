@@ -11,12 +11,8 @@ class ValidationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      width: double.infinity,
       child: Card(
-        elevation: 20.0,
-        margin: const EdgeInsets.only(
-          top: 100.0,
-        ),
+        elevation: 5.0,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: child,

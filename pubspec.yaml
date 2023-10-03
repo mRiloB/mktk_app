@@ -70,6 +70,8 @@ flutter:
     - assets/animations/boat.json
     - assets/animations/moby-boat.json
     - assets/img/logo-splash.png
+    - assets/img/logo-moby.png
+    - assets/img/wave-background.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

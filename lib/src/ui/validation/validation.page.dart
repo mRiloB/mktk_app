@@ -3,7 +3,6 @@ import 'package:mktk_app/src/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.appbar.dart';
-import 'package:mktk_app/src/ui/validation/widgets/validation.background.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.container.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.content.dart';
 
@@ -30,7 +29,7 @@ class _ValidationPageState extends State<ValidationPage> {
       isLoading = true;
     });
     try {
-      List<Boat> sbBoats = await BoatController().getBoats();
+      List<Boat> sbBoats = await BoatController().getSBBoats();
       setState(() {
         boats.addAll(sbBoats);
       });
@@ -43,33 +42,47 @@ class _ValidationPageState extends State<ValidationPage> {
     }
   }
 
+  void onConfirm() async {
+    if (boatSelected.isEmpty) return;
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      Boat boat = boats.firstWhere(
+        (element) => element.abbr == boatSelected,
+      );
+      await BoatController().saveLocal(boat);
+      if (!mounted) return;
+      // Navigator.of(context).pushReplacementNamed('/home');
+    } catch (e) {
+      debugPrint('=== validation onConfirm error: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Stack(
-          children: [
-            const ValidationBackground(),
-            ValidationContainer(
-              child: Loader(
-                isLoading: isLoading,
-                loaderChild: ValidationContent(
-                  boats: boats,
-                  boatSelected: boatSelected,
-                  onBoatChanged: (Boat? boat) {
-                    debugPrint("Boat selected: ${boat!.abbr}");
-                    setState(() {
-                      boatSelected = boat.abbr;
-                    });
-                  },
-                ),
-              ),
-            ),
-            const ValidationAppBar(),
-          ],
+    return Scaffold(
+      appBar: const ValidationAppBar(
+        height: 100.0,
+      ),
+      body: ValidationContainer(
+        child: Loader(
+          isLoading: isLoading,
+          loaderChild: ValidationContent(
+            boats: boats,
+            boatSelected: boatSelected,
+            onBoatChanged: (Boat? boat) {
+              debugPrint("Boat selected: ${boat!.abbr}");
+              setState(() {
+                boatSelected = boat.abbr;
+              });
+            },
+            onConfirm: onConfirm,
+          ),
         ),
       ),
     );
