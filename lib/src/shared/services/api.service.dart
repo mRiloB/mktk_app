@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -24,9 +24,9 @@ class APIModel {
 
 class MkTkAPI {
   static Future<APIModel> apiConfig(String cmd) async {
-    Boat boat = await BoatController().getLocalBoat();
+    Boat? boat = await BoatController().getBoat();
     return APIModel(
-      url: Uri.parse('https://${boat.connectionIp}/rest$cmd'),
+      url: Uri.parse('https://${boat!.connectionIp}/rest$cmd'),
       headers: {
         'Authorization':
             'Basic ${base64.encode(utf8.encode(boat.connectionUser!))}',

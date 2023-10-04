@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/controllers/supabase/boatsb.controller.dart';
+import 'package:mktk_app/src/shared/controllers/supabase/sellersb.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
+import 'package:mktk_app/src/shared/models/seller.model.dart';
+import 'package:mktk_app/src/shared/widgets/gen_card.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.appbar.dart';
-import 'package:mktk_app/src/ui/validation/widgets/validation.container.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.content.dart';
 
 class ValidationPage extends StatefulWidget {
@@ -29,7 +32,7 @@ class _ValidationPageState extends State<ValidationPage> {
       isLoading = true;
     });
     try {
-      List<Boat> sbBoats = await BoatController().getSBBoats();
+      List<Boat> sbBoats = await BoatSBController().getBoats();
       setState(() {
         boats.addAll(sbBoats);
       });
@@ -51,7 +54,9 @@ class _ValidationPageState extends State<ValidationPage> {
       Boat boat = boats.firstWhere(
         (element) => element.abbr == boatSelected,
       );
-      await BoatController().saveLocal(boat);
+      // await BoatController().save(boat);
+      Seller seller = await SellerSBController().getSellerById(boat.sellerId!);
+      debugPrint("=== $boatSelected SELLER: ${seller.name}");
       if (!mounted) return;
       // Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
@@ -69,19 +74,21 @@ class _ValidationPageState extends State<ValidationPage> {
       appBar: const ValidationAppBar(
         height: 100.0,
       ),
-      body: ValidationContainer(
-        child: Loader(
-          isLoading: isLoading,
-          loaderChild: ValidationContent(
-            boats: boats,
-            boatSelected: boatSelected,
-            onBoatChanged: (Boat? boat) {
-              debugPrint("Boat selected: ${boat!.abbr}");
-              setState(() {
-                boatSelected = boat.abbr;
-              });
-            },
-            onConfirm: onConfirm,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: GenCard(
+          child: Loader(
+            isLoading: isLoading,
+            loaderChild: ValidationContent(
+              boats: boats,
+              boatSelected: boatSelected,
+              onBoatChanged: (Boat? boat) {
+                setState(() {
+                  boatSelected = boat!.abbr;
+                });
+              },
+              onConfirm: onConfirm,
+            ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/models/boat.model.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -17,11 +18,11 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void mockSplash() async {
-    debugPrint('=== indo pra home depois de 3s');
-    String route =
-        await BoatController().existsLocal() ? '/home' : '/validation';
+    Boat? boat = await BoatController().getBoat();
     Timer(const Duration(milliseconds: 3 * 1000), () {
-      Navigator.of(context).pushReplacementNamed(route);
+      Navigator.of(context).pushReplacementNamed(
+        boat == null ? '/validation' : '/home',
+      );
     });
   }
 

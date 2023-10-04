@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/controllers/boat.controller.dart';
+import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
-// import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.appbar.dart';
 
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Boat boat = Boat(abbr: "", name: "");
-  // Map<String, dynamic> resource = {};
   bool isLoading = false;
 
   @override
@@ -29,12 +27,9 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
     try {
-      Boat localBoat = await BoatController().getLocalBoat();
-      // dynamic apiRet = await MkTkAPI.cmdPrint('/system/resource');
-
+      Boat? localBoat = await BoatController().getBoat();
       setState(() {
-        boat = localBoat;
-        // resource = apiRet;
+        boat = localBoat!;
       });
     } catch (e) {
       debugPrint('=== home error: $e');
