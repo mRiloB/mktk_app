@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ValidationAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MobyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
 
-  const ValidationAppBar({
+  const MobyAppBar({
     super.key,
     this.height = kToolbarHeight,
   });
@@ -14,8 +14,7 @@ class ValidationAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // Add AppBar here only
-      backgroundColor: const Color.fromRGBO(70, 129, 233, 1),
+      backgroundColor: const Color.fromRGBO(84, 163, 212, 1),
       elevation: 0.0,
       title: Image.asset(
         'assets/img/logo-moby.png',

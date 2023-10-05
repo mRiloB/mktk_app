@@ -17,6 +17,7 @@ class ValidationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primary = const Color.fromRGBO(84, 163, 212, 1);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,11 +63,13 @@ class ValidationContent extends StatelessWidget {
                     value: boat,
                     child: Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 16,
-                          child: Icon(
+                          backgroundColor: primary,
+                          child: const Icon(
                             Icons.directions_boat_filled_rounded,
                             size: 16,
+                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(
@@ -90,10 +93,9 @@ class ValidationContent extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          style: const ButtonStyle(
-            elevation: MaterialStatePropertyAll(0),
-            backgroundColor:
-                MaterialStatePropertyAll(Color.fromRGBO(70, 129, 233, 1)),
+          style: ButtonStyle(
+            elevation: const MaterialStatePropertyAll(0),
+            backgroundColor: MaterialStatePropertyAll(primary),
           ),
           onPressed: onConfirm,
           child: const Padding(

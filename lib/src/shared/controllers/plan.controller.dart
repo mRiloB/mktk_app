@@ -2,13 +2,16 @@ import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/storage/plan.storage.dart';
 
 class PlanController {
-  Future<Plan?> getBoat() async {
+  Future<List<Plan>> getPlans() async {
     List<Map<String, dynamic>> plans = await PlanStorage.select();
-    if (plans.isEmpty) return null;
-    return Plan(
-      name: plans.first['name'],
-      price: plans.first['price'],
-    );
+    return plans
+        .map(
+          (plan) => Plan(
+            name: plan['name'],
+            price: plan['price'],
+          ),
+        )
+        .toList();
   }
 
   Future<void> save(Plan plan) async {

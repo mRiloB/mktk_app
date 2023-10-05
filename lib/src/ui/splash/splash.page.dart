@@ -31,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
     return SafeArea(
       child: Container(
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(70, 129, 233, 1),
+          color: Color.fromRGBO(84, 163, 212, 1),
         ),
         child: Center(
           child: Image.asset(
