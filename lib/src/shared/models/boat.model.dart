@@ -31,4 +31,21 @@ class Boat {
       'connection_user': connectionUser,
     };
   }
+
+  @override
+  String toString() {
+    return '''
+    Boat
+    {
+      id: $id,
+      abbr: $abbr,
+      name: $name,
+      partner_id: $partnerId,
+      seller_id: $sellerId,
+      pos_id: $posId,
+      connection_ip: $connectionIp,
+      connection_user: $connectionUser,
+    }
+    ''';
+  }
 }

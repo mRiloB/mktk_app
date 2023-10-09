@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
-import 'package:mktk_app/src/shared/controllers/plan.controller.dart';
-import 'package:mktk_app/src/shared/controllers/seller.controller.dart';
+import 'package:mktk_app/src/shared/controllers/master.controller.dart';
 import 'package:mktk_app/src/shared/controllers/supabase/boatsb.controller.dart';
-import 'package:mktk_app/src/shared/controllers/supabase/plansb.controller.dart';
-import 'package:mktk_app/src/shared/controllers/supabase/sellersb.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
-import 'package:mktk_app/src/shared/models/plan.model.dart';
-import 'package:mktk_app/src/shared/models/seller.model.dart';
 import 'package:mktk_app/src/shared/widgets/gen_card.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
@@ -58,15 +52,7 @@ class _ValidationPageState extends State<ValidationPage> {
       Boat boat = boats.firstWhere(
         (element) => element.abbr == boatSelected,
       );
-      Seller seller = await SellerSBController().getSellerById(boat.sellerId!);
-      List<Plan> plans = await PlanSBController().getPlansByBoatId(boat.id!);
-
-      await BoatController().save(boat);
-      await SellerController().save(seller);
-      for (Plan plan in plans) {
-        await PlanController().save(plan);
-      }
-
+      await MasterController.save(boat);
       if (!mounted) return;
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
@@ -89,6 +75,7 @@ class _ValidationPageState extends State<ValidationPage> {
               boats: boats,
               boatSelected: boatSelected,
               onBoatChanged: (Boat? boat) {
+                debugPrint(boat.toString());
                 setState(() {
                   boatSelected = boat!.abbr;
                 });

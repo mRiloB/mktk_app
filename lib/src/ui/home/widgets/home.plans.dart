@@ -16,12 +16,18 @@ class HomePlans extends StatelessWidget {
       title: 'Planos',
       children: [
         SizedBox(
-          height: 200.0,
+          height: 65.0 * plans.length,
           child: ListView(
             physics: const NeverScrollableScrollPhysics(),
             children: [
               ...plans.map(
-                (plan) => HomeCard(title: plan.name),
+                (plan) => HomeCard(
+                  title: plan.name,
+                  icon: Icons.wifi,
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/sales', arguments: plan);
+                  },
+                ),
               )
             ],
           ),

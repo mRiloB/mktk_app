@@ -22,14 +22,9 @@ class MobyContainer extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
+        child: ListView(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: children,
-          ),
+          children: children,
         ),
       ),
     );

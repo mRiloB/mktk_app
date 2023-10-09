@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 
@@ -41,9 +40,6 @@ class MkTkAPI {
       api.url,
       headers: api.headers,
     );
-    String body = response.body;
-    int status = response.statusCode;
-    debugPrint('=== BODY $status: $body');
-    return jsonDecode(body);
+    return jsonDecode(response.body);
   }
 }

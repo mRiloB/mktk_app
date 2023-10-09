@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class OthersCard extends StatelessWidget {
+class SalesCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final Function()? onTap;
 
-  const OthersCard({
+  const SalesCard({
     super.key,
     required this.icon,
     required this.title,
@@ -26,11 +26,11 @@ class OthersCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 40.0,
+              size: 30.0,
               color: Colors.white,
             ),
             const SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             Text(
               title,

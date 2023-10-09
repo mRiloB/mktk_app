@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class HomeCard extends StatelessWidget {
   final String title;
-  // final String route;
+  final IconData icon;
+  final Function() onTap;
 
   const HomeCard({
     super.key,
     required this.title,
-    // required this.route,
+    required this.icon,
+    required this.onTap,
   });
 
   @override
@@ -15,14 +17,12 @@ class HomeCard extends StatelessWidget {
     Color primary = const Color.fromRGBO(84, 163, 212, 1);
 
     return GestureDetector(
-      onTap: () {
-        // Navigator.of(context).pushNamed(route);
-      },
+      onTap: onTap,
       child: Card(
         color: primary,
         child: ListTile(
-          leading: const Icon(
-            Icons.wifi,
+          leading: Icon(
+            icon,
             color: Colors.white,
           ),
           title: Text(

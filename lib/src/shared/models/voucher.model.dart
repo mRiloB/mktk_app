@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class Voucher {
   late int id;
   late String name;
@@ -51,22 +49,5 @@ class Voucher {
   @override
   String toString() {
     return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt, payment: $payment }';
-  }
-
-  static String generateVoucher() {
-    const length = 4;
-    // const letterLowerCase = "abcdefghijklmnopqrstuvwxyz";
-    const letterUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const number = '0123456789';
-    // const special = '@#*?!=+';
-
-    String chars = "";
-    chars += letterUpperCase;
-    chars += number;
-
-    return List.generate(length, (index) {
-      final indexRandom = Random.secure().nextInt(chars.length);
-      return chars[indexRandom];
-    }).join('');
   }
 }

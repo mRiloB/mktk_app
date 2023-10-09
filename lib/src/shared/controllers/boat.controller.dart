@@ -6,8 +6,13 @@ class BoatController {
     List<Map<String, dynamic>> boats = await BoatStorage.select();
     if (boats.isEmpty) return null;
     return Boat(
+      id: boats.first['id'],
       abbr: boats.first['abbr'],
       name: boats.first['name'],
+      connectionIp: boats.first['connection_ip'],
+      connectionUser: boats.first['connection_user'],
+      partnerId: boats.first['partner_id'],
+      sellerId: boats.first['seller_id'],
     );
   }
 
