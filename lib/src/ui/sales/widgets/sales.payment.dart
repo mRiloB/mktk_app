@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 import 'package:mktk_app/src/ui/sales/widgets/sales.card.dart';
 
 class SalesPayment extends StatelessWidget {
-  const SalesPayment({super.key});
+  final String voucher;
+  final Plan plan;
+
+  const SalesPayment({
+    super.key,
+    required this.voucher,
+    required this.plan,
+  });
 
   @override
   Widget build(BuildContext context) {

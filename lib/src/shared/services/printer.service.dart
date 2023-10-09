@@ -15,8 +15,9 @@ class PrinterService {
     BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
     Map<String, dynamic> config = {};
     List<LineText> list = [];
-    String printedAt =
-        again ? dateFmt(DateTime.now().toString()) : dateFmt(voucher.createdAt);
+    String printedAt = again
+        ? dateFmt(DateTime.now().toString())
+        : dateFmt(voucher.createdAt!);
 
     list.add(
       LineText(

@@ -5,9 +5,9 @@ class VoucherService {
     const length = 4;
     // const letterLowerCase = 'abcdefghijklmnopqrstuvwxyz';
     const letterUpperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const number = '0123456789';
+    // const number = '0123456789';
 
-    String chars = '$letterUpperCase$number';
+    String chars = letterUpperCase;
 
     return List.generate(length, (index) {
       final indexRandom = Random.secure().nextInt(chars.length);

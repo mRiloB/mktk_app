@@ -48,13 +48,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MobyContainer(
-        children: [
-          HomePlans(plans: plans),
-          const HomeOthers(),
-        ],
-      ),
+    return MobyContainer(
+      isLoading: isLoading,
+      children: [
+        HomePlans(plans: plans),
+        const HomeOthers(),
+      ],
     );
   }
 }

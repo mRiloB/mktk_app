@@ -100,6 +100,7 @@ class _ActivePageState extends State<ActivePage> {
   Widget build(BuildContext context) {
     Color primary = const Color.fromRGBO(84, 163, 212, 1);
     return MobyContainer(
+      isLoading: isLoading,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10.0),

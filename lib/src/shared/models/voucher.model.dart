@@ -1,53 +1,53 @@
 class Voucher {
-  late int id;
-  late String name;
-  late String server;
-  late String profile;
-  late String limitUptime;
-  late double price;
-  late String createdAt;
-  late String updatedAt;
-  late String payment;
+  final int? id;
+  final String name;
+  final String server;
+  final String profile;
+  final String limitUptime;
+  final double price;
+  final String payment;
+  String? createdAt;
+  final String? updatedAt;
 
-  Voucher(
-      {int? id,
-      String? name,
-      String? server,
-      String? profile,
-      String? limitUptime,
-      double? price,
-      String? createdAt,
-      String? updatedAt,
-      String? payment}) {
-    this.id = id ?? 0;
-    this.name = name ?? '';
-    this.server = server ?? '';
-    this.profile = profile ?? '';
-    this.limitUptime = limitUptime ?? '';
-    this.price = price ?? 0.0;
-    this.createdAt = createdAt ?? '';
-    this.updatedAt = updatedAt ?? '';
-    this.payment = payment ?? '';
-  }
+  Voucher({
+    this.id,
+    required this.name,
+    required this.server,
+    required this.profile,
+    required this.limitUptime,
+    required this.payment,
+    required this.price,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-  Map<String, dynamic> toMap([bool noId = false]) {
-    Map<String, dynamic> map = {
+  Map<String, dynamic> toMap() {
+    return {
       "id": id,
       "name": name,
       "server": server,
       "profile": profile,
       "limit_uptime": limitUptime,
       "price": price.toString(),
-      "createdAt": createdAt,
-      "updatedAt": updatedAt,
+      "created_at": createdAt,
+      "updated_at": updatedAt,
       "payment": payment
     };
-    if (noId) map.remove('id');
-    return map;
   }
 
   @override
   String toString() {
-    return 'Voucher { name: $name, server: $server, profile: $profile, limit-uptime: $limitUptime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt, payment: $payment }';
+    return '''
+Voucher {
+  name: $name,
+  server: $server,
+  profile: $profile,
+  limit-uptime: $limitUptime,
+  price: $price,
+  payment: $payment,
+  createdAt: $createdAt,
+  updatedAt: $updatedAt
+}
+''';
   }
 }

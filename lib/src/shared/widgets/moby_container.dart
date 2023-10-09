@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/shared/widgets/moby_appbar.dart';
 
 class MobyContainer extends StatelessWidget {
   final List<Widget> children;
+  final bool isLoading;
   const MobyContainer({
     super.key,
     this.children = const <Widget>[],
+    this.isLoading = false,
   });
 
   @override
@@ -22,9 +25,12 @@ class MobyContainer extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: ListView(
-          padding: const EdgeInsets.all(10.0),
-          children: children,
+        child: Loader(
+          isLoading: isLoading,
+          loaderChild: ListView(
+            padding: const EdgeInsets.all(10.0),
+            children: children,
+          ),
         ),
       ),
     );
