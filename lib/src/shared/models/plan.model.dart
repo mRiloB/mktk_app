@@ -2,10 +2,12 @@ class Plan {
   final int? id;
   final String name;
   final double price;
+  final String limitUptime;
 
   Plan({
     required this.name,
     required this.price,
+    required this.limitUptime,
     this.id,
   });
 
@@ -14,6 +16,7 @@ class Plan {
       'id': id,
       'name': name,
       'price': price,
+      'limit_uptime': limitUptime,
     };
   }
 }

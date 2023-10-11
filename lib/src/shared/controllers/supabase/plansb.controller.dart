@@ -7,7 +7,8 @@ class PlanSBController {
         await Supabase.instance.client.from('boats_plans').select('''
             boat_id,
             plans(name),
-            price
+            price,
+            limit_uptime
           ''');
     List<Plan> boatPlans = plans
         .where((plan) => plan['boat_id'] == id)
@@ -15,6 +16,7 @@ class PlanSBController {
           (plan) => Plan(
             name: plan['plans']['name'],
             price: plan['price'].toDouble(),
+            limitUptime: plan['limit_uptime'],
           ),
         )
         .toList();

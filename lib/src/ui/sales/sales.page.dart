@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/voucher.controller.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
-import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 import 'package:mktk_app/src/ui/sales/widgets/sales.card.dart';
@@ -16,7 +15,7 @@ class SalesPage extends StatefulWidget {
 }
 
 class _SalesPageState extends State<SalesPage> {
-  Plan plan = Plan(name: '', price: 0);
+  Plan plan = Plan(name: '', price: 0, limitUptime: '');
   String newVoucher = '';
   bool isLoading = false;
 
@@ -51,23 +50,15 @@ class _SalesPageState extends State<SalesPage> {
       isLoading = true;
     });
     try {
-      Map<String, dynamic> data = {
-        "name": newVoucher,
-        "profile": plan.name,
-        "server": "all",
-        "comment": "ADICIONADO VIA APP MOBY VOUCHERS"
-      };
-      await MkTkAPI.cmdAdd('/ip/hotspot/user', data);
-      await VoucherController().save(
-        Voucher(
-          name: newVoucher,
-          server: 'all',
-          profile: plan.name,
-          limitUptime: '',
-          payment: payment,
-          price: plan.price,
-        ),
+      Voucher voucher = Voucher(
+        name: newVoucher,
+        server: 'all',
+        profile: plan.name,
+        limitUptime: plan.limitUptime,
+        payment: payment,
+        price: plan.price,
       );
+      await VoucherController().save(voucher, plan);
       if (!mounted) return;
       Navigator.of(context).pop();
     } catch (e) {

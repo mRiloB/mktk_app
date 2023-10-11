@@ -12,7 +12,8 @@ class PlanStorage {
         CREATE TABLE $_table(
           id INTEGER,
           name TEXT,
-          price REAL
+          price REAL,
+          limit_uptime TEXT
         );
       ''',
     );

@@ -9,6 +9,7 @@ class PlanController {
           (plan) => Plan(
             name: plan['name'],
             price: plan['price'],
+            limitUptime: plan['limit_uptime'],
           ),
         )
         .toList();
