@@ -14,8 +14,8 @@ class HomeOthers extends StatelessWidget {
       await Navigator.of(context).pushReplacementNamed('/');
     }
 
-    void onActiveTap() async {
-      await Navigator.of(context).pushNamed('/active');
+    void goto(String route) async {
+      await Navigator.of(context).pushNamed(route);
     }
 
     return HomeContainer(
@@ -31,9 +31,10 @@ class HomeOthers extends StatelessWidget {
                 icon: Icons.history,
                 title: 'Histórico',
               ),
-              const OthersCard(
+              OthersCard(
                 icon: Icons.bar_chart_rounded,
                 title: 'Relatório',
+                onTap: () => goto('/report'),
               ),
               OthersCard(
                 icon: Icons.settings,
@@ -43,7 +44,7 @@ class HomeOthers extends StatelessWidget {
               OthersCard(
                 icon: Icons.contactless_rounded,
                 title: 'Ativos',
-                onTap: onActiveTap,
+                onTap: () => goto('/active'),
               ),
             ],
           ),

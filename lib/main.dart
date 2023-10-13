@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktk_app/src/ui/report/report.page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mktk_app/supabase.env.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/active': (context) => const ActivePage(),
         '/sales': (context) => const SalesPage(),
+        '/report': (context) => const ReportPage(),
       },
       initialRoute: '/',
     );
