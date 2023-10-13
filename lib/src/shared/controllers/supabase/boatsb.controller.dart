@@ -1,4 +1,7 @@
 import 'package:mktk_app/src/shared/models/boat.model.dart';
+import 'package:mktk_app/src/shared/models/partner.model.dart';
+import 'package:mktk_app/src/shared/models/report.model.dart';
+import 'package:mktk_app/src/shared/models/seller.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BoatSBController {
@@ -20,5 +23,29 @@ class BoatSBController {
           ),
         )
         .toList();
+  }
+
+  Future<Report> getBoatsAndForeign(String abbr) async {
+    List<dynamic> boats = await Supabase.instance.client.from('boats').select(
+      '''
+      name,
+      partner(cnpj, name, address, owner),
+      sellers(cpf, name)
+      ''',
+    ).eq('abbr', abbr);
+    return Report(
+      boatName: boats.first['name'],
+      partner: Partner(
+        cnpj: boats.first['partner']['cnpj'],
+        name: boats.first['partner']['name'],
+        address: boats.first['partner']['address'],
+        owner: boats.first['partner']['name'],
+      ),
+      seller: Seller(
+        cpf: boats.first['sellers']['cpf'],
+        name: boats.first['sellers']['name'],
+        phone: '',
+      ),
+    );
   }
 }

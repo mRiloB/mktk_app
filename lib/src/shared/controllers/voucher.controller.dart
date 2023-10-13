@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mktk_app/src/shared/controllers/supabase/vouchersb.controller.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
@@ -49,5 +50,12 @@ class VoucherController {
     if (voucherExists.isNotEmpty) VoucherController().create();
 
     return voucher;
+  }
+
+  Future<void> extractDataFromLocal() async {
+    List<Voucher> vouchers = await getVouchers();
+    for (Voucher e in vouchers) {
+      debugPrint('${e.name} | ${e.payment} | ${e.price} | ${e.createdAt}');
+    }
   }
 }
