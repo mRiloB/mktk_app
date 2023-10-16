@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 
 class ReportInput extends StatelessWidget {
   final String title;
-  const ReportInput({super.key, required this.title});
+  final Future<void> Function(dynamic a)? onTap;
+  final TextEditingController? dateTextController = TextEditingController();
+  ReportInput({
+    super.key,
+    required this.title,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +17,7 @@ class ReportInput extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
@@ -22,6 +29,8 @@ class ReportInput extends StatelessWidget {
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.date_range),
             ),
+            controller: dateTextController,
+            onTap: () async {},
           ),
         ],
       ),

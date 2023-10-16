@@ -26,9 +26,10 @@ class HomeOthers extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 3,
           children: [
-            const OthersCard(
+            OthersCard(
               icon: Icons.history,
               title: 'Histórico',
+              onTap: () => goto('/history'),
             ),
             OthersCard(
               icon: Icons.bar_chart_rounded,

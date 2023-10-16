@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/ui/active/widgets/active.list.dart';
 
 class Active {
   final String? id;
@@ -98,43 +99,10 @@ class _ActivePageState extends State<ActivePage> {
 
   @override
   Widget build(BuildContext context) {
-    Color primary = const Color.fromRGBO(84, 163, 212, 1);
     return MobyContainer(
       isLoading: isLoading,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(
-            'Usuários ativos: ${actives.length}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-            ),
-          ),
-        ),
-        ...actives.map(
-          (active) => Card(
-            child: ListTile(
-              leading: Icon(
-                Icons.wifi,
-                color: primary,
-              ),
-              title: Text(
-                active.user!,
-                style: TextStyle(
-                  color: primary,
-                ),
-              ),
-              subtitle: Text(
-                '${active.address} | ${active.macaddress}',
-                style: TextStyle(
-                  color: primary,
-                ),
-              ),
-              minLeadingWidth: 0,
-            ),
-          ),
-        ),
+        ActiveList(actives: actives),
       ],
     );
   }

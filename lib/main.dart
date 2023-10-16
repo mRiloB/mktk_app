@@ -1,15 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktk_app/src/ui/report/report.page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mktk_app/supabase.env.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/ui/splash/splash.page.dart';
 import 'package:mktk_app/src/ui/validation/validation.page.dart';
 import 'package:mktk_app/src/ui/home/home.page.dart';
 import 'package:mktk_app/src/ui/active/active.page.dart';
 import 'package:mktk_app/src/ui/sales/sales.page.dart';
+import 'package:mktk_app/src/ui/history/history.page.dart';
+import 'package:mktk_app/src/ui/report/report.page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +28,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Moby Vouchers',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const [
+        Locale('pt'),
+      ],
       routes: {
         '/': (context) => const SplashPage(),
         '/validation': (context) => const ValidationPage(),
@@ -33,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/active': (context) => const ActivePage(),
         '/sales': (context) => const SalesPage(),
         '/report': (context) => const ReportPage(),
+        '/history': (context) => const HistoryPage(),
       },
       initialRoute: '/',
     );
