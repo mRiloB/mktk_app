@@ -22,6 +22,14 @@ class ReportHeader extends StatelessWidget {
             const Divider(),
             Text(report.seller!.name),
             const Divider(),
+            Text(
+                'Dinheiro (${report.dinheiro['qtd']}): ${report.dinheiro['total']}'),
+            Text('Débito (${report.debito['qtd']}): ${report.debito['total']}'),
+            Text(
+                'Crédito (${report.credito['qtd']}): ${report.credito['total']}'),
+            Text('Pix (${report.pix['qtd']}): ${report.pix['total']}'),
+            const Divider(),
+            Text('TOTAL (${report.vouchers!.length}): ${report.total}'),
           ],
         ),
       ),

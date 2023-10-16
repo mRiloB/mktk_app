@@ -13,4 +13,16 @@ class ReportController {
     report.vouchers = vouchers;
     return report;
   }
+
+  Map<String, dynamic> totalByPayment(List<Voucher> vouchers, String payment) {
+    List<Voucher> vouchersByPayment =
+        vouchers.where((voucher) => voucher.payment == payment).toList();
+    double total =
+        vouchersByPayment.fold(0.0, (prev, voucher) => prev + voucher.price);
+
+    return {
+      'total': total,
+      'qtd': vouchersByPayment.length,
+    };
+  }
 }

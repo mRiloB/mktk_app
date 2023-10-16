@@ -7,11 +7,21 @@ class Report {
   final Partner? partner;
   final Seller? seller;
   List<Voucher>? vouchers;
+  Map<String, dynamic> dinheiro;
+  Map<String, dynamic> credito;
+  Map<String, dynamic> debito;
+  Map<String, dynamic> pix;
+  double total;
 
   Report({
     this.boatName,
     this.partner,
     this.seller,
     this.vouchers = const [],
+    this.dinheiro = const {},
+    this.credito = const {},
+    this.debito = const {},
+    this.pix = const {},
+    this.total = 0.0,
   });
 }

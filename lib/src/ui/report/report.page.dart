@@ -37,6 +37,16 @@ class _ReportPageState extends State<ReportPage> {
     try {
       Report aux = await ReportController().generate();
       // calcular porcentagem
+      aux.dinheiro =
+          ReportController().totalByPayment(aux.vouchers!, 'dinheiro');
+      aux.credito = ReportController().totalByPayment(aux.vouchers!, 'credito');
+      aux.debito = ReportController().totalByPayment(aux.vouchers!, 'debito');
+      aux.pix = ReportController().totalByPayment(aux.vouchers!, 'pix');
+      aux.total = aux.dinheiro['total'] +
+          aux.debito['total'] +
+          aux.credito['total'] +
+          aux.pix['total'];
+      // fim do calculo
       setState(() {
         report = aux;
       });
@@ -98,7 +108,6 @@ class _ReportPageState extends State<ReportPage> {
                 isLoading: isFormLoading,
                 loaderChild: ElevatedButton(
                   onPressed: () async {
-                    if (selectedDate.duration.isNegative) return;
                     await loadVouchers();
                   },
                   style: ButtonStyle(
