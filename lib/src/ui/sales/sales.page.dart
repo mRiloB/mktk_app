@@ -79,35 +79,33 @@ class _SalesPageState extends State<SalesPage> {
         HomeContainer(
           title: 'Pagamentos',
           children: [
-            SizedBox(
-              height: 95.0,
-              child: GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 4,
-                children: [
-                  SalesCard(
-                    onTap: () => createAccess('dinheiro'),
-                    icon: Icons.price_change_outlined,
-                    title: 'Dinheiro',
-                  ),
-                  SalesCard(
-                    onTap: () => createAccess('debito'),
-                    icon: Icons.credit_card,
-                    title: 'Débito',
-                  ),
-                  SalesCard(
-                    onTap: () => createAccess('credito'),
-                    icon: Icons.credit_card,
-                    title: 'Crédito',
-                  ),
-                  SalesCard(
-                    onTap: () => createAccess('pix'),
-                    icon: Icons.pix,
-                    title: 'PIX',
-                  ),
-                ],
-              ),
-            )
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 4,
+              children: [
+                SalesCard(
+                  onTap: () => createAccess('dinheiro'),
+                  icon: Icons.price_change_outlined,
+                  title: 'Dinheiro',
+                ),
+                SalesCard(
+                  onTap: () => createAccess('debito'),
+                  icon: Icons.credit_card,
+                  title: 'Débito',
+                ),
+                SalesCard(
+                  onTap: () => createAccess('credito'),
+                  icon: Icons.credit_card,
+                  title: 'Crédito',
+                ),
+                SalesCard(
+                  onTap: () => createAccess('pix'),
+                  icon: Icons.pix,
+                  title: 'PIX',
+                ),
+              ],
+            ),
           ],
         )
       ],

@@ -21,39 +21,38 @@ class _ReportFormState extends State<ReportForm> {
       children: [
         Form(
           key: _formKey,
-          child: SizedBox(
-            height: 68.0 * 3,
-            child: ListView(
-              children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: ReportInput(title: 'De:'),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: ReportInput(title: 'Até:'),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.0,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(primary),
-                    ),
-                    child: const Text('Filtrar'),
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: ReportInput(title: 'De:'),
                   ),
-                )
-              ],
-            ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: ReportInput(title: 'Até:'),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50.0,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(primary),
+                  ),
+                  child: const Text('Filtrar'),
+                ),
+              )
+            ],
           ),
         )
       ],

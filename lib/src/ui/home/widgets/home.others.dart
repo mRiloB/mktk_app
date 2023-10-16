@@ -21,34 +21,32 @@ class HomeOthers extends StatelessWidget {
     return HomeContainer(
       title: 'Outros',
       children: [
-        SizedBox(
-          height: 245.0,
-          child: GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            children: [
-              const OthersCard(
-                icon: Icons.history,
-                title: 'Histórico',
-              ),
-              OthersCard(
-                icon: Icons.bar_chart_rounded,
-                title: 'Relatório',
-                onTap: () => goto('/report'),
-              ),
-              OthersCard(
-                icon: Icons.settings,
-                title: 'Configurações',
-                onTap: onConfigTap,
-              ),
-              OthersCard(
-                icon: Icons.contactless_rounded,
-                title: 'Ativos',
-                onTap: () => goto('/active'),
-              ),
-            ],
-          ),
-        )
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          children: [
+            const OthersCard(
+              icon: Icons.history,
+              title: 'Histórico',
+            ),
+            OthersCard(
+              icon: Icons.bar_chart_rounded,
+              title: 'Relatório',
+              onTap: () => goto('/report'),
+            ),
+            OthersCard(
+              icon: Icons.settings,
+              title: 'Configurações',
+              onTap: onConfigTap,
+            ),
+            OthersCard(
+              icon: Icons.contactless_rounded,
+              title: 'Ativos',
+              onTap: () => goto('/active'),
+            ),
+          ],
+        ),
       ],
     );
   }

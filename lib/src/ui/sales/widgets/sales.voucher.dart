@@ -18,28 +18,26 @@ class SalesVoucher extends StatelessWidget {
     return HomeContainer(
       title: 'Voucher',
       children: [
-        SizedBox(
-          height: 65.0 * 3,
-          child: ListView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              HomeCard(
-                title: voucher,
-                icon: Icons.person,
-                onTap: () {},
-              ),
-              HomeCard(
-                title: plan.name,
-                icon: Icons.wifi_tethering,
-                onTap: () {},
-              ),
-              HomeCard(
-                title: plan.price.toString(),
-                icon: Icons.attach_money,
-                onTap: () {},
-              ),
-            ],
-          ),
+        ListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            HomeCard(
+              title: voucher,
+              icon: Icons.person,
+              onTap: () {},
+            ),
+            HomeCard(
+              title: plan.name,
+              icon: Icons.wifi_tethering,
+              onTap: () {},
+            ),
+            HomeCard(
+              title: plan.price.toString(),
+              icon: Icons.attach_money,
+              onTap: () {},
+            ),
+          ],
         ),
       ],
     );

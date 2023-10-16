@@ -39,7 +39,7 @@ class BoatSBController {
         cnpj: boats.first['partner']['cnpj'],
         name: boats.first['partner']['name'],
         address: boats.first['partner']['address'],
-        owner: boats.first['partner']['name'],
+        owner: boats.first['partner']['owner'],
       ),
       seller: Seller(
         cpf: boats.first['sellers']['cpf'],
