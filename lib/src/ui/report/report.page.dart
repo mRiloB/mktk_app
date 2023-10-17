@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mktk_app/src/shared/controllers/plan.controller.dart';
 import 'package:mktk_app/src/shared/controllers/report.controller.dart';
+import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/report.model.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
@@ -35,17 +37,35 @@ class _ReportPageState extends State<ReportPage> {
       isFormLoading = true;
     });
     try {
-      Report aux = await ReportController().generate();
+      Report aux = await ReportController()
+          .generate(selectedDate.start, selectedDate.end);
+      List<Plan> plans = await PlanController().getPlans();
       // calcular porcentagem
-      aux.dinheiro =
-          ReportController().totalByPayment(aux.vouchers!, 'dinheiro');
-      aux.credito = ReportController().totalByPayment(aux.vouchers!, 'credito');
-      aux.debito = ReportController().totalByPayment(aux.vouchers!, 'debito');
-      aux.pix = ReportController().totalByPayment(aux.vouchers!, 'pix');
+      aux.reference =
+          '${getRawDate(selectedDate.start)} - ${getRawDate(selectedDate.end)}';
+      aux.dinheiro = ReportController()
+          .totalByAttr(aux.vouchers, 'payment', payment: 'dinheiro');
+      aux.credito = ReportController()
+          .totalByAttr(aux.vouchers, 'payment', payment: 'credito');
+      aux.debito = ReportController()
+          .totalByAttr(aux.vouchers, 'payment', payment: 'debito');
+      aux.pix = ReportController()
+          .totalByAttr(aux.vouchers, 'payment', payment: 'pix');
       aux.total = aux.dinheiro['total'] +
           aux.debito['total'] +
           aux.credito['total'] +
           aux.pix['total'];
+      aux.plans = {};
+      for (Plan plan in plans) {
+        Map<String, dynamic> planReport = ReportController()
+            .totalByAttr(aux.vouchers, 'profile', profile: plan.name);
+        aux.plans?.addAll({
+          plan.name: {
+            'total': planReport['total'],
+            'qtd': planReport['qtd'],
+          },
+        });
+      }
       // fim do calculo
       setState(() {
         report = aux;

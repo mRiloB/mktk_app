@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/models/report.model.dart';
+import 'package:mktk_app/src/ui/report/widgets/header.cell.dart';
 
 class ReportHeader extends StatelessWidget {
   final Report report;
@@ -7,6 +8,7 @@ class ReportHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primary = const Color.fromRGBO(84, 163, 212, 1);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -15,21 +17,77 @@ class ReportHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(report.boatName!),
+            Text(
+              report.boatName!,
+              style: TextStyle(
+                  color: primary, fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
             const Divider(),
-            Text(report.partner!.name),
+            Text(
+              report.partner!.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             Text(report.partner!.cnpj),
             const Divider(),
-            Text(report.seller!.name),
+            Text('Caixa: ${report.seller!.name}',
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('Referência: ${report.reference}'),
             const Divider(),
-            Text(
-                'Dinheiro (${report.dinheiro['qtd']}): ${report.dinheiro['total']}'),
-            Text('Débito (${report.debito['qtd']}): ${report.debito['total']}'),
-            Text(
-                'Crédito (${report.credito['qtd']}): ${report.credito['total']}'),
-            Text('Pix (${report.pix['qtd']}): ${report.pix['total']}'),
+            const Text('Total por tipo de pagamento:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Table(
+              border: TableBorder.all(),
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: [
+                const TableRow(
+                  children: [
+                    HeaderCell(text: 'Dinheiro'),
+                    HeaderCell(text: 'Débito'),
+                    HeaderCell(text: 'Crédito'),
+                    HeaderCell(text: 'PIX'),
+                    HeaderCell(text: 'Total'),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    HeaderCell(
+                        text: report.dinheiro['total'], align: TextAlign.right),
+                    HeaderCell(
+                        text: report.debito['total'], align: TextAlign.right),
+                    HeaderCell(
+                        text: report.credito['total'], align: TextAlign.right),
+                    HeaderCell(
+                        text: report.pix['total'], align: TextAlign.right),
+                    HeaderCell(text: report.total, align: TextAlign.right),
+                  ],
+                ),
+              ],
+            ),
             const Divider(),
-            Text('TOTAL (${report.vouchers!.length}): ${report.total}'),
+            const Text('Total por plano de acesso:',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Table(
+              border: TableBorder.all(),
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: [
+                const TableRow(
+                  children: [
+                    HeaderCell(text: 'Plano'),
+                    HeaderCell(text: 'Qtd'),
+                    HeaderCell(text: 'Total'),
+                  ],
+                ),
+                ...report.plans!.entries
+                    .map((plan) => TableRow(children: [
+                          HeaderCell(text: plan.key, align: TextAlign.left),
+                          HeaderCell(text: plan.value['qtd']),
+                          HeaderCell(
+                              text: plan.value['total'],
+                              align: TextAlign.right),
+                        ]))
+                    .toList(),
+              ],
+            )
           ],
         ),
       ),

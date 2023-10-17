@@ -6,12 +6,14 @@ class Report {
   final String? boatName;
   final Partner? partner;
   final Seller? seller;
-  List<Voucher>? vouchers;
+  List<Voucher> vouchers;
   Map<String, dynamic> dinheiro;
   Map<String, dynamic> credito;
   Map<String, dynamic> debito;
   Map<String, dynamic> pix;
   double total;
+  String reference;
+  Map<String, dynamic>? plans;
 
   Report({
     this.boatName,
@@ -23,5 +25,7 @@ class Report {
     this.debito = const {},
     this.pix = const {},
     this.total = 0.0,
+    this.reference = '',
+    this.plans,
   });
 }
