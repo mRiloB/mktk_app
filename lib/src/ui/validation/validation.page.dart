@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/master.controller.dart';
 import 'package:mktk_app/src/shared/controllers/supabase/boatsb.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/gen_card.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.content.dart';
@@ -35,6 +36,13 @@ class _ValidationPageState extends State<ValidationPage> {
       });
     } catch (e) {
       debugPrint('=== validation error: $e');
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;
@@ -56,6 +64,12 @@ class _ValidationPageState extends State<ValidationPage> {
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
       debugPrint('=== validation onConfirm error: $e');
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;

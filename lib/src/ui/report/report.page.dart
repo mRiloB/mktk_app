@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/shared/controllers/plan.controller.dart';
 import 'package:mktk_app/src/shared/controllers/report.controller.dart';
-import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/report.model.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
 import 'package:mktk_app/src/ui/report/widgets/report.form.dart';
@@ -28,8 +27,7 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-    dateTextController.text =
-        '${getRawDate(selectedDate.start)} - ${getRawDate(selectedDate.end)}';
+    formatDateRange();
   }
 
   Future<void> loadVouchers() async {
@@ -39,39 +37,18 @@ class _ReportPageState extends State<ReportPage> {
     try {
       Report aux = await ReportController()
           .generate(selectedDate.start, selectedDate.end);
-      List<Plan> plans = await PlanController().getPlans();
-      // calcular porcentagem
-      aux.reference =
-          '${getRawDate(selectedDate.start)} - ${getRawDate(selectedDate.end)}';
-      aux.dinheiro = ReportController()
-          .totalByAttr(aux.vouchers, 'payment', payment: 'dinheiro');
-      aux.credito = ReportController()
-          .totalByAttr(aux.vouchers, 'payment', payment: 'credito');
-      aux.debito = ReportController()
-          .totalByAttr(aux.vouchers, 'payment', payment: 'debito');
-      aux.pix = ReportController()
-          .totalByAttr(aux.vouchers, 'payment', payment: 'pix');
-      aux.total = aux.dinheiro['total'] +
-          aux.debito['total'] +
-          aux.credito['total'] +
-          aux.pix['total'];
-      aux.plans = {};
-      for (Plan plan in plans) {
-        Map<String, dynamic> planReport = ReportController()
-            .totalByAttr(aux.vouchers, 'profile', profile: plan.name);
-        aux.plans?.addAll({
-          plan.name: {
-            'total': planReport['total'],
-            'qtd': planReport['qtd'],
-          },
-        });
-      }
-      // fim do calculo
       setState(() {
         report = aux;
       });
     } catch (e) {
       debugPrint('=== report error: ${e.toString()}');
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isFormLoading = false;
@@ -92,13 +69,14 @@ class _ReportPageState extends State<ReportPage> {
       setState(() {
         selectedDate = picked;
       });
-      dateTextController.text =
-          '${getRawDate(selectedDate.start)} - ${getRawDate(selectedDate.end)}';
     }
+    formatDateRange();
   }
 
-  String getRawDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+  void formatDateRange() {
+    String result =
+        '${ReportController.getRawDate(selectedDate.start)} - ${ReportController.getRawDate(selectedDate.end)}';
+    dateTextController.text = result;
   }
 
   @override

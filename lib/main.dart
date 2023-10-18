@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktk_app/src/ui/configuration/configuration.page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mktk_app/supabase.env.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Supabase.initialize(url: sbUrl, anonKey: sbAnonKey);
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/sales': (context) => const SalesPage(),
         '/report': (context) => const ReportPage(),
         '/history': (context) => const HistoryPage(),
+        '/configuration': (context) => const ConfigurationPage(),
       },
       initialRoute: '/',
     );

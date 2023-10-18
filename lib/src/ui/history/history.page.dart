@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/voucher.controller.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
+import 'package:mktk_app/src/shared/widgets/list_card.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
-import 'package:mktk_app/src/ui/history/widgets/history.list.dart';
+import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -32,6 +34,13 @@ class _HistoryPageState extends State<HistoryPage> {
       });
     } catch (e) {
       debugPrint('=== history error: ${e.toString()}');
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;
@@ -39,12 +48,24 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
+  String dateFormatted(String date) {
+    return date.split(' ')[0].split('-').reversed.join('/');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MobyContainer(
       isLoading: isLoading,
       children: [
-        HistoryList(vouchers: vouchers),
+        HomeContainer(title: 'Vouchers vendidos: ${vouchers.length}'),
+        ...vouchers.map(
+          (voucher) => ListCard(
+            icon: Icons.wifi,
+            title: voucher.name,
+            subtitle:
+                '${voucher.profile} | ${voucher.payment} | ${dateFormatted(voucher.createdAt!)}',
+          ),
+        ),
       ],
     );
   }

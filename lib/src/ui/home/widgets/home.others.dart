@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mktk_app/src/shared/controllers/master.controller.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 import 'package:mktk_app/src/ui/home/widgets/others.card.dart';
 
@@ -8,11 +7,11 @@ class HomeOthers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onConfigTap([bool mounted = true]) async {
-      await MasterController.clear();
-      if (!mounted) return;
-      await Navigator.of(context).pushReplacementNamed('/');
-    }
+    // void onConfigTap([bool mounted = true]) async {
+    //   await MasterController.clear();
+    //   if (!mounted) return;
+    //   await Navigator.of(context).pushReplacementNamed('/');
+    // }
 
     void goto(String route) async {
       await Navigator.of(context).pushNamed(route);
@@ -39,13 +38,13 @@ class HomeOthers extends StatelessWidget {
             OthersCard(
               icon: Icons.settings,
               title: 'Configurações',
-              onTap: onConfigTap,
+              onTap: () => goto('/configuration'),
             ),
-            OthersCard(
-              icon: Icons.contactless_rounded,
-              title: 'Ativos',
-              onTap: () => goto('/active'),
-            ),
+            // OthersCard(
+            //   icon: Icons.contactless_rounded,
+            //   title: 'Ativos',
+            //   onTap: () => goto('/active'),
+            // ),
           ],
         ),
       ],

@@ -3,6 +3,7 @@ import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/controllers/plan.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.others.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.plans.dart';
@@ -39,6 +40,13 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       debugPrint('=== home error: $e');
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;

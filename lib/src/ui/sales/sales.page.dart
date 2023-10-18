@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/voucher.controller.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 import 'package:mktk_app/src/ui/sales/widgets/sales.card.dart';
@@ -63,6 +64,12 @@ class _SalesPageState extends State<SalesPage> {
       Navigator.of(context).pop();
     } catch (e) {
       debugPrint('=== create access error: ${e.toString()}');
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;

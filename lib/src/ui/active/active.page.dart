@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
+import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
+import 'package:mktk_app/src/shared/widgets/list_card.dart';
 import 'package:mktk_app/src/shared/widgets/moby_container.dart';
-import 'package:mktk_app/src/ui/active/widgets/active.list.dart';
+import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 
 class Active {
   final String? id;
@@ -90,6 +92,13 @@ class _ActivePageState extends State<ActivePage> {
       });
     } catch (e) {
       debugPrint('=== active error: ${e.toString()}');
+      if (!mounted) return;
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => ErrorDialog(
+          message: e.toString(),
+        ),
+      );
     } finally {
       setState(() {
         isLoading = false;
@@ -102,7 +111,14 @@ class _ActivePageState extends State<ActivePage> {
     return MobyContainer(
       isLoading: isLoading,
       children: [
-        ActiveList(actives: actives),
+        HomeContainer(title: 'Usuários ativos: ${actives.length}'),
+        ...actives.map(
+          (active) => ListCard(
+            icon: Icons.wifi,
+            title: active.user!,
+            subtitle: '${active.address} | ${active.macaddress}',
+          ),
+        ),
       ],
     );
   }

@@ -9,6 +9,19 @@ class ReportHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color primary = const Color.fromRGBO(84, 163, 212, 1);
+    String calcTotalPlan() {
+      return report.plans!.entries
+          .fold<double>(0, (prev, plan) => prev + plan.value['total'])
+          .toString();
+    }
+
+    String calcQtdPlan() {
+      return report.plans!.entries
+          .fold<double>(0, (prev, plan) => prev + plan.value['qtd'])
+          .toInt()
+          .toString();
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -78,14 +91,25 @@ class ReportHeader extends StatelessWidget {
                   ],
                 ),
                 ...report.plans!.entries
-                    .map((plan) => TableRow(children: [
+                    .map(
+                      (plan) => TableRow(
+                        children: [
                           HeaderCell(text: plan.key, align: TextAlign.left),
                           HeaderCell(text: plan.value['qtd']),
                           HeaderCell(
                               text: plan.value['total'],
                               align: TextAlign.right),
-                        ]))
+                        ],
+                      ),
+                    )
                     .toList(),
+                TableRow(
+                  children: [
+                    const HeaderCell(text: 'Total', align: TextAlign.left),
+                    HeaderCell(text: calcQtdPlan()),
+                    HeaderCell(text: calcTotalPlan(), align: TextAlign.right),
+                  ],
+                ),
               ],
             )
           ],
