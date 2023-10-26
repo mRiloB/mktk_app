@@ -18,7 +18,7 @@ class MobyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       title: Image.asset(
         'assets/img/logo-moby.png',
-        height: 100.0,
+        height: 80.0,
       ),
       centerTitle: true,
       toolbarHeight: height,

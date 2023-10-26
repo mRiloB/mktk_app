@@ -3,7 +3,7 @@ import 'package:mktk_app/src/shared/controllers/report.controller.dart';
 import 'package:mktk_app/src/shared/models/report.model.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/report/widgets/report.form.dart';
 import 'package:mktk_app/src/ui/report/widgets/report.header.dart';
 
@@ -83,7 +83,7 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     Color primary = const Color.fromRGBO(84, 163, 212, 1);
 
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
         ReportForm(

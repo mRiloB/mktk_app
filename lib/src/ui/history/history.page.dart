@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/voucher.controller.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
+import 'package:mktk_app/src/shared/services/printer.service.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/list_card.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -54,7 +55,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
         HomeContainer(title: 'Vouchers vendidos: ${vouchers.length}'),
@@ -64,6 +65,8 @@ class _HistoryPageState extends State<HistoryPage> {
             title: voucher.name,
             subtitle:
                 '${voucher.profile} | ${voucher.payment} | ${dateFormatted(voucher.createdAt!)}',
+            onLongPress: () async =>
+                await PrinterService.printVoucher(voucher, true),
           ),
         ),
       ],

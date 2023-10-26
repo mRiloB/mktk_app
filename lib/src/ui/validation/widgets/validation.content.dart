@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
+import 'package:mktk_app/src/shared/widgets/mcontainer.dart';
 
 class ValidationContent extends StatelessWidget {
   final List<Boat> boats;
@@ -18,19 +19,9 @@ class ValidationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color primary = const Color.fromRGBO(84, 163, 212, 1);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
+    return MContainer(
+      title: 'Para continuar informe suas credenciais',
       children: [
-        const Text(
-          "Para continuar informe suas credenciais",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18.0,
-            decoration: TextDecoration.none,
-          ),
-        ),
         Container(
           margin: const EdgeInsets.symmetric(
             vertical: 15.0,

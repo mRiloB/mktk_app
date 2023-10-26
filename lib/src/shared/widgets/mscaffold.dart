@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/widgets/loader.dart';
 import 'package:mktk_app/src/shared/widgets/moby_appbar.dart';
 
-class MobyContainer extends StatelessWidget {
+class MScaffold extends StatelessWidget {
   final List<Widget> children;
   final bool isLoading;
   final bool reverse;
-  const MobyContainer({
+  const MScaffold({
     super.key,
     this.children = const <Widget>[],
     this.isLoading = false,
@@ -17,7 +17,7 @@ class MobyContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MobyAppBar(
-        height: 100.0,
+        height: 80.0,
       ),
       body: Container(
         height: double.infinity,

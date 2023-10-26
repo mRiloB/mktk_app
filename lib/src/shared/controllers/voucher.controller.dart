@@ -4,6 +4,7 @@ import 'package:mktk_app/src/shared/controllers/supabase/vouchersb.controller.da
 import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
+import 'package:mktk_app/src/shared/services/printer.service.dart';
 import 'package:mktk_app/src/shared/services/voucher.service.dart';
 import 'package:mktk_app/src/shared/storage/voucher.storage.dart';
 
@@ -40,6 +41,7 @@ class VoucherController {
     await MkTkAPI.cmdAdd('/ip/hotspot/user', data);
     await VoucherStorage.insert(voucher);
     await VoucherSBController().save(voucher);
+    await PrinterService.printVoucher(voucher);
   }
 
   Future<String> create() async {

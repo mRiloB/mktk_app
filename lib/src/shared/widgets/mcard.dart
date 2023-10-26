@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class GenCard extends StatelessWidget {
+class MCard extends StatelessWidget {
   final Widget child;
 
-  const GenCard({
+  const MCard({
     super.key,
     required this.child,
   });

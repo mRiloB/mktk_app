@@ -3,7 +3,7 @@ import 'package:mktk_app/src/shared/controllers/voucher.controller.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/models/voucher.model.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 import 'package:mktk_app/src/ui/sales/widgets/sales.card.dart';
 import 'package:mktk_app/src/ui/sales/widgets/sales.voucher.dart';
@@ -79,7 +79,7 @@ class _SalesPageState extends State<SalesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
         SalesVoucher(voucher: newVoucher, plan: plan),

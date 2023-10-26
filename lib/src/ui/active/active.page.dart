@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/services/api.service.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
 import 'package:mktk_app/src/shared/widgets/list_card.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.container.dart';
 
 class Active {
@@ -108,7 +108,7 @@ class _ActivePageState extends State<ActivePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
         HomeContainer(title: 'Usuários ativos: ${actives.length}'),

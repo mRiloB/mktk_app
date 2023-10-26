@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/controllers/boat.controller.dart';
 import 'package:mktk_app/src/shared/controllers/plan.controller.dart';
+import 'package:mktk_app/src/shared/controllers/printer.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 import 'package:mktk_app/src/shared/models/plan.model.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.others.dart';
 import 'package:mktk_app/src/ui/home/widgets/home.plans.dart';
 
@@ -25,6 +26,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     debugPrint("=== init");
     loadBoatInfo();
+    connectPrinter();
+  }
+
+  @override
+  void dispose() async {
+    await PrinterController.disconnectLocalDevice();
+    super.dispose();
   }
 
   void loadBoatInfo() async {
@@ -54,9 +62,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void connectPrinter() async {
+    bool hasLocalPrinter = await PrinterController.connectLocalDevice();
+    if (hasLocalPrinter) {
+      final snackBar = SnackBar(
+        content: const Text('Dispositivo conectado!'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
         HomePlans(plans: plans),

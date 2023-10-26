@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktk_app/src/shared/models/report.model.dart';
+import 'package:mktk_app/src/shared/services/printer.service.dart';
 import 'package:mktk_app/src/ui/report/widgets/header.cell.dart';
 
 class ReportHeader extends StatelessWidget {
@@ -94,7 +95,11 @@ class ReportHeader extends StatelessWidget {
                     .map(
                       (plan) => TableRow(
                         children: [
-                          HeaderCell(text: plan.key, align: TextAlign.left),
+                          plan.key == 'Viagem Completa'
+                              ? const HeaderCell(
+                                  text: 'Completa', align: TextAlign.left)
+                              : HeaderCell(
+                                  text: plan.key, align: TextAlign.left),
                           HeaderCell(text: plan.value['qtd']),
                           HeaderCell(
                               text: plan.value['total'],
@@ -111,7 +116,22 @@ class ReportHeader extends StatelessWidget {
                   ],
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 10.0),
+            SizedBox(
+              height: 50.0,
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(primary),
+                ),
+                onPressed: () async {
+                  await PrinterService.printReport(
+                      report, calcQtdPlan(), calcTotalPlan());
+                },
+                child: const Text('Imprimir'),
+              ),
+            ),
           ],
         ),
       ),

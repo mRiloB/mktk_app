@@ -3,8 +3,7 @@ import 'package:mktk_app/src/shared/controllers/master.controller.dart';
 import 'package:mktk_app/src/shared/controllers/supabase/boatsb.controller.dart';
 import 'package:mktk_app/src/shared/models/boat.model.dart';
 import 'package:mktk_app/src/shared/widgets/error_dialog.dart';
-import 'package:mktk_app/src/shared/widgets/gen_card.dart';
-import 'package:mktk_app/src/shared/widgets/moby_container.dart';
+import 'package:mktk_app/src/shared/widgets/mscaffold.dart';
 import 'package:mktk_app/src/ui/validation/widgets/validation.content.dart';
 
 class ValidationPage extends StatefulWidget {
@@ -79,21 +78,19 @@ class _ValidationPageState extends State<ValidationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MobyContainer(
+    return MScaffold(
       isLoading: isLoading,
       children: [
-        GenCard(
-          child: ValidationContent(
-            boats: boats,
-            boatSelected: boatSelected,
-            onBoatChanged: (Boat? boat) {
-              debugPrint(boat.toString());
-              setState(() {
-                boatSelected = boat!.abbr;
-              });
-            },
-            onConfirm: onConfirm,
-          ),
+        ValidationContent(
+          boats: boats,
+          boatSelected: boatSelected,
+          onBoatChanged: (Boat? boat) {
+            debugPrint(boat.toString());
+            setState(() {
+              boatSelected = boat!.abbr;
+            });
+          },
+          onConfirm: onConfirm,
         )
       ],
     );
